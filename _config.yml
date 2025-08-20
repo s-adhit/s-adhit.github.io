@@ -90,11 +90,7 @@ baidu_site_verification  :
 
 # Social Sharing
 twitter:
-  username               :erizosamurai
-facebook:
-  username               :
-  app_id                 :
-  publisher              :
+  username               : erizosamurai
 og_image                 : # Open Graph/Twitter default site image
 # For specifying social profiles
 # - https://developers.google.com/structured-data/customize/social-profiles
@@ -113,8 +109,8 @@ analytics:
 
 # Site Author
 author:
-  name             : "Your Name"
-  avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
+  name             : "Adhit Simhadri"
+  avatar           : "/assets/images/bio-photo.jpg"
   bio              : "I am an **amazing** person."
   location         : "Somewhere"
   email            :
