@@ -5,33 +5,114 @@
 @charset "utf-8";
 
 @import "minimal-mistakes/skins/contrast";
-@import "minimal-mistakes"; main partials
+@import "minimal-mistakes"; /* main partials */
 
 body {
-  // font-family: "Roboto", sans-serif; // Primary font
-  font-family: "Libre Franklin", sans-serif; // Alternative font (commented out)
-  font-size: 18px;
+    font-family: "Libre Franklin", sans-serif;
+    font-size: 18px;
+}
+
+.page{
+    padding-right: 20px !important;
+}
+
+/* Content width adjustments - Apply to both single pages AND home page */
+.single .page__content, 
+.single .page-content, 
+.single .page__inner-wrap, 
+.single .content, 
+.single .page__main,
+.home .page__content,
+.home .page-content, 
+.home .page__inner-wrap, 
+.home .content, 
+.home .page__main,
+.page__content,
+.page-content, 
+.page__inner-wrap, 
+.content, 
+.page__main {
+    max-width: 1200px !important;
+    width: 100% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    // border: 2px solid red !important; /* Debug: Red border to confirm targeting */
+}
+
+/* Parent layout adjustments */
+.page__inner, .grid__wrapper {
+    max-width: 1500px !important; /* Fits 1200px content + 300px sidebar */
+    margin-left: auto !important;
+    margin-right: auto !important;
+    // border: 2px solid blue !important; /* Debug: Blue border to confirm targeting */
+}
+
+/* Sidebar */
+.sidebar {
+    max-width: 300px !important;
+    width: 300px !important;
+    opacity: 1;
+    // border: 2px solid green !important; /* Debug: Green border to confirm targeting */
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+    .page__inner-wrap,
+    .page__content {
+        max-width: 85% !important;
+        /* No padding overrides - let theme handle spacing */
+    }
+    .sidebar.sticky {
+        max-width: 250px !important;
+        width: 250px !important;
+    }
+}
+
+@media (max-width: 1024px) {
+    .page__inner-wrap,
+    .page__content {
+        max-width: 90% !important;
+        /* No padding overrides - let theme handle spacing */
+    }
+    .sidebar.sticky {
+        max-width: 220px !important;
+        width: 220px !important;
+    }
+}
+
+@media (max-width: 800px) {
+    .page__inner-wrap,
+    .page__content {
+        max-width: 95% !important;
+        /* No padding overrides - let theme handle spacing */
+    }
+    .sidebar.sticky {
+        max-width: 100% !important;
+        width: 100% !important;
+    }
 }
 
 @media (min-width: 1024px) {
-.author__avatar  img{
-    width: 200px !important;
-    height: 200px !important;
-    max-width: 200px !important;
-    max-height: 200px !important;
-  }
+    .author__avatar img {
+        width: 200px !important;
+        height: 200px !important;
+        max-width: 200px !important;
+        max-height: 200px !important;
+    }
 }
 
 a:link {
-  text-decoration: none;
+    text-decoration: none;
 }
 
 a:hover {
-  text-decoration: underline;
+    text-decoration: underline;
 }
 
 a:active {
-  text-decoration: underline;
+    text-decoration: underline;
 }
 
 h2 {
@@ -43,78 +124,74 @@ ul + h2 {
 }
 
 .masthead {
-  font-size: 22px;
-}
-
-.sidebar {
-  opacity: 1;
+    font-size: 22px;
 }
 
 td {
-  font-size: 16px;
-  border: transparent;
+    font-size: 16px;
+    border: transparent;
 }
 
 td.date-cell {
-  text-align: right;
+    text-align: right;
 }
 
 table {
-  border-right:solid 20px transparent;
+    border-right: solid 20px transparent;
 }
 
-// News
+/* News */
 .news-scroll {
-  max-height: 200px;
-  overflow-y: auto;
-  padding-right: 10px;
-  border-left: 3px solid #444;
-  padding-left: 10px;
+    max-height: 200px;
+    overflow-y: auto;
+    padding-right: 10px;
+    border-left: 3px solid #444;
+    padding-left: 10px;
 }
 
 /* Scrollbar styling (WebKit browsers: Chrome, Edge, Safari) */
 .news-scroll::-webkit-scrollbar {
-  width: 8px;
+    width: 8px;
 }
 
 .news-scroll::-webkit-scrollbar-track {
-  background: #1a1a1a;
-  border-radius: 10px;
+    background: #1a1a1a;
+    border-radius: 10px;
 }
 
 .news-scroll::-webkit-scrollbar-thumb {
-  background: #444;
-  border-radius: 10px;
+    background: #444;
+    border-radius: 10px;
 }
 
 .news-scroll::-webkit-scrollbar-thumb:hover {
-  background: #666;
+    background: #666;
 }
 
 /* Firefox support */
 .news-scroll {
-  scrollbar-width: thin;
-  scrollbar-color: #444 #1a1a1a;
+    scrollbar-width: thin;
+    scrollbar-color: #444 #1a1a1a;
 }
 
-// Publications
+/* Publications */
 .pub-list {
-  /* make your name bold anywhere in publications */
-  strong {
-    font-weight: bold;
-  }
+    /* make your name bold anywhere in publications */
+    strong {
+        font-weight: bold;
+    }
 }
 
 /* automatically bold your name (regex-like replacement via CSS attribute selector) */
 .pub-list li, .pub-list p {
-  font-weight: normal;
+    font-weight: normal;
 }
 
 .pub-list li:has(> :contains("Simhadri, A.")),
 .pub-list p:has(:contains("Simhadri, A.")) {
-  font-weight: bold;
+    font-weight: bold;
 }
 
 .my-name {
-  font-weight: bold;
+    font-weight: bold;
 }
