@@ -115,13 +115,13 @@ author:
   email   : "adhit.simhadri@gmail.com"
   links:
     - label: "X"
-      # icon: "fab fa-x-twitter"
+      icon: "fab fa-x-twitter"
       url: "https://x.com/ErizoSamurai"
     - label: "GitHub"
-      # icon: "fab fa-github"
+      icon: "fab fa-github"
       url: "https://github.com/erizosamurai"
     - label: "LinkedIn"
-      # icon: "fab fa-linkedin"
+      icon: "fab fa-linkedin"
       url: "https://www.linkedin.com/in/adhitsimhadri/"
 
 
