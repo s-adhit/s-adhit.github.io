@@ -11,7 +11,7 @@ Hi, I'm **Adhit Simhadri**, a self-taught AI researcher. My interests lie in Mec
 
 Currently, I am working as a Research Intern at IIITH, DSAC Lab under the supervision of [Dr. P. K. Reddy](https://faculty.iiit.ac.in/~pkreddy/). I have previously worked as a Project Intern at INCOIS under [Dr. Nimit Kumar](https://linktr.ee/nim.it).
 
-If you want to discuss something, please feel free to mail me at [adhit.simhadri@gmail.com](mailto:adhit.simhadri@gmail.com).
+If you'd like to chat or collaborate, drop me a line at [adhit.simhadri@gmail.com](mailto:adhit.simhadri@gmail.com).
 
 ---
 
