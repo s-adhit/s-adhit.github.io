@@ -4,15 +4,26 @@
 
 @charset "utf-8";
 
+/* Import fonts - Add these to your _config.yml or HTML head instead */
+/* For Charter: Add to _config.yml under minimal_mistakes_skin or use Google Fonts */
+/* For Söhne: You'll need to host the font files or use a web font service */
+
 @import "minimal-mistakes/skins/contrast";
 @import "minimal-mistakes"; /* main partials */
 
 body {
-    font-family: "Libre Franklin", sans-serif;
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
     font-size: 18px;
+    line-height: 1.6;
 }
 
-.page{
+h1, h2, h3, h4, h5, h6 {
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.page {
     padding-right: 20px !important;
 }
 
@@ -38,7 +49,6 @@ body {
     margin-right: auto !important;
     padding-left: 20px !important;
     padding-right: 20px !important;
-    // border: 2px solid red !important; /* Debug: Red border to confirm targeting */
 }
 
 /* Parent layout adjustments */
@@ -46,7 +56,6 @@ body {
     max-width: 1500px !important; /* Fits 1200px content + 300px sidebar */
     margin-left: auto !important;
     margin-right: auto !important;
-    // border: 2px solid blue !important; /* Debug: Blue border to confirm targeting */
 }
 
 /* Sidebar */
@@ -54,47 +63,14 @@ body {
     max-width: 300px !important;
     width: 300px !important;
     opacity: 1;
-    // border: 2px solid green !important; /* Debug: Green border to confirm targeting */
 }
 
-/* Responsive adjustments */
-@media (max-width: 1200px) {
-    .page__inner-wrap,
-    .page__content {
-        max-width: 85% !important;
-        /* No padding overrides - let theme handle spacing */
+/* Large screens */
+@media (min-width: 1200px) {
+    body {
+        font-size: 18px;
     }
-    .sidebar.sticky {
-        max-width: 250px !important;
-        width: 250px !important;
-    }
-}
-
-@media (max-width: 1024px) {
-    .page__inner-wrap,
-    .page__content {
-        max-width: 90% !important;
-        /* No padding overrides - let theme handle spacing */
-    }
-    .sidebar.sticky {
-        max-width: 220px !important;
-        width: 220px !important;
-    }
-}
-
-@media (max-width: 800px) {
-    .page__inner-wrap,
-    .page__content {
-        max-width: 95% !important;
-        /* No padding overrides - let theme handle spacing */
-    }
-    .sidebar.sticky {
-        max-width: 100% !important;
-        width: 100% !important;
-    }
-}
-
-@media (min-width: 1024px) {
+    
     .author__avatar img {
         width: 200px !important;
         height: 200px !important;
@@ -103,6 +79,192 @@ body {
     }
 }
 
+/* Medium-large screens */
+@media (max-width: 1199px) and (min-width: 1025px) {
+    .page__inner-wrap,
+    .page__content {
+        max-width: 85% !important;
+        padding-left: 20px !important;
+        padding-right: 20px !important;
+    }
+    
+    .sidebar.sticky {
+        max-width: 250px !important;
+        width: 250px !important;
+    }
+}
+
+/* Medium screens (tablets) */
+@media (max-width: 1024px) and (min-width: 769px) {
+    body {
+        font-size: 17px;
+    }
+    
+    .page__inner-wrap,
+    .page__content {
+        max-width: 90% !important;
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+    }
+    
+    .sidebar.sticky {
+        max-width: 220px !important;
+        width: 220px !important;
+    }
+    
+    .masthead {
+        font-size: 20px;
+    }
+    
+}
+
+/* Small tablets and large phones */
+@media (max-width: 768px) and (min-width: 481px) {
+    body {
+        font-size: 16px;
+    }
+    
+    .page__inner-wrap,
+    .page__content {
+        max-width: 95% !important;
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+    }
+    
+    .sidebar.sticky {
+        max-width: 100% !important;
+        width: 100% !important;
+        position: static !important;
+        float: none !important;
+        margin-bottom: 2rem;
+    }
+    
+    .masthead {
+        font-size: 18px;
+    }
+    
+    
+    .page {
+        padding-right: 15px !important;
+    }
+    
+    h1 { font-size: 1.8rem; }
+    h2 { font-size: 1.5rem; }
+    h3 { font-size: 1.3rem; }
+    h4 { font-size: 1.1rem; }
+    
+    td {
+        font-size: 14px;
+    }
+}
+
+/* Mobile phones */
+@media (max-width: 480px) {
+    body {
+        font-size: 15px;
+        line-height: 1.5;
+    }
+    
+    .page__inner-wrap,
+    .page__content,
+    .page__main {
+        max-width: 100% !important;
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+    
+    .page {
+        padding-right: 10px !important;
+        padding-left: 10px !important;
+    }
+    
+    .sidebar.sticky {
+        max-width: 100% !important;
+        width: 100% !important;
+        position: static !important;
+        float: none !important;
+        margin-bottom: 1.5rem;
+        padding: 15px;
+    }
+    
+    .masthead {
+        font-size: 16px;
+        padding: 10px;
+    }
+    
+    
+    h1 { font-size: 1.6rem; margin-bottom: 0.8rem; }
+    h2 { font-size: 1.4rem; margin-bottom: 0.6rem; }
+    h3 { font-size: 1.2rem; margin-bottom: 0.5rem; }
+    h4 { font-size: 1rem; margin-bottom: 0.4rem; }
+    
+    td {
+        font-size: 13px;
+        padding: 5px 3px;
+    }
+    
+    table {
+        border-right: solid 5px transparent;
+        font-size: 13px;
+    }
+    
+    /* Make news scroll area more mobile-friendly */
+    .news-scroll {
+        max-height: 150px;
+        padding-right: 5px;
+        padding-left: 8px;
+        border-left: 2px solid #444;
+    }
+    
+    /* Adjust scrollbar for mobile */
+    .news-scroll::-webkit-scrollbar {
+        width: 6px;
+    }
+}
+
+/* Extra small phones */
+@media (max-width: 320px) {
+    body {
+        font-size: 14px;
+    }
+    
+    .page__inner-wrap,
+    .page__content,
+    .page__main {
+        padding-left: 8px !important;
+        padding-right: 8px !important;
+    }
+    
+    .page {
+        padding-right: 8px !important;
+        padding-left: 8px !important;
+    }
+    
+    h1 { font-size: 1.4rem; }
+    h2 { font-size: 1.3rem; }
+    h3 { font-size: 1.1rem; }
+    h4 { font-size: 1rem; }
+    
+    .masthead {
+        font-size: 14px;
+    }
+    
+    // .author__avatar img {
+    //     width: 80px !important;
+    //     height: 80px !important;
+    //     max-width: 80px !important;
+    //     max-height: 80px !important;
+    // }
+    
+    td {
+        font-size: 12px;
+        padding: 3px 2px;
+    }
+}
+
+/* Link styles */
 a:link {
     text-decoration: none;
 }
@@ -115,6 +277,7 @@ a:active {
     text-decoration: underline;
 }
 
+/* Heading styles */
 h2 {
     margin-top: 3px;
 }
@@ -123,12 +286,8 @@ ul + h2 {
     margin-bottom: 0px;
 }
 
-.masthead {
-    font-size: 22px;
-}
-
+/* Table styles */
 td {
-    font-size: 16px;
     border: transparent;
 }
 
@@ -138,9 +297,11 @@ td.date-cell {
 
 table {
     border-right: solid 20px transparent;
+    width: 100%;
+    table-layout: auto;
 }
 
-/* News */
+/* News section */
 .news-scroll {
     max-height: 200px;
     overflow-y: auto;
