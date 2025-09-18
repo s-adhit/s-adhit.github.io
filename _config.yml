@@ -22,7 +22,7 @@ title_separator          : "|"
 subtitle                 : # site tagline that appears below site title in masthead
 name                     : "Adhit Simhadri"
 description              : "Personal website and Blog"
-url                      : "https://erizosamurai.github.io"# the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
+url                      : "https://s-adhit.github.io"# the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : 
 repository               : # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
 teaser                   : # path of fallback teaser image, e.g. "/assets/images/500x300.png"
@@ -116,10 +116,10 @@ author:
   links:
     - label: "X"
       icon: "fab fa-x-twitter"
-      url: "https://x.com/ErizoSamurai"
+      url: "https://x.com/5_4dh1t
     - label: "GitHub"
       icon: "fab fa-github"
-      url: "https://github.com/erizosamurai"
+      url: "https://github.com/s-adhit"
     - label: "LinkedIn"
       icon: "fab fa-linkedin"
       url: "https://www.linkedin.com/in/adhitsimhadri/"
