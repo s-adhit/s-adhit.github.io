@@ -17,7 +17,7 @@ If you'd like to chat or collaborate, drop me a line at [adhit.simhadri@gmail.co
 
 # News
 <div class="news-scroll" markdown = "1">
-- **Aug 2025**: Working on Concept Bottleneck Models at IIIT Hyderabad  
+- **Aug 2025**: Joined IIIT Hyderabad as a Research Intern. 
 - **Jul 2025**: Graduated from CBIT with a Bachelors degree in Computer Science(Cybersecurity)
 - **Dec 2024**: Presented a survey paper on Phishing detection systems at ICPEST CBIT
 - **Jul 2024**: Worked on Microplastics Concentration prediction in Indian Ocean at INCOIS.  
