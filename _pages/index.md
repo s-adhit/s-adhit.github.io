@@ -7,7 +7,7 @@ markdown: kramdown
 ---
 
 #  About Me
-Hi, I'm **Adhit Simhadri**, a self-taught AI researcher. My interests lie in Interpretability, Optimizations, Computer Vision, and Natural Language Processing.  
+Hi, I'm **Adhit Simhadri**, a self-taught AI researcher. My interests lie in Interpretability, Safety and Alignment in AI with a focus on Multimodality.  
 
 Currently, I am working as a Research Intern at IIITH, DSAC Lab under the supervision of [Dr. P. K. Reddy](https://faculty.iiit.ac.in/~pkreddy/). I have previously worked as a Project Intern at INCOIS under [Dr. Nimit Kumar](https://linktr.ee/nim.it).
 
