@@ -1,0 +1,64 @@
+baseURL = "https://s-adhit.github.io/"
+languageCode = "en-us"
+title = "Adhit"
+theme = "stack"
+
+[pagination]
+  pagerSize = 5
+
+[params]
+  mainSections = ["blog", "notes", "research"]
+  
+  showThemeToggle = false
+
+  [params.assets]
+    customCSS = ["css/custom.css"]
+
+  [params.sidebar]
+    compact = false
+
+  [params.rightSidebar]
+    enabled = false
+
+  [params.article]
+    math = false
+    toc = false   #
+
+  [params.colorScheme]
+    toggle = false
+    default = "dark"
+
+  [params.style]
+    colorScheme = "dark"
+
+  [params.darkMode]
+    enable = true
+    default = "dark"
+
+
+# Navigation Menu
+[menu]
+  [[menu.main]]
+    name = "Research"
+    url = "/research/"
+    weight = 2
+
+  [[menu.main]]
+    name = "Notes"
+    url = "/notes/"
+    weight = 3
+
+  [[menu.main]]
+    name = "Blog"
+    url = "/blog/"
+    weight = 4
+
+  [[menu.main]]
+    name = "Photos"
+    url = "/photos/"
+    weight = 5
+  
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true

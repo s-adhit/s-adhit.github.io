@@ -1,0 +1,27 @@
+{{ define "main" }}
+
+<div class="photo-gallery">
+
+  {{ $pages := sort .Pages "Date" "desc" }}
+  {{ $grouped := $pages.GroupByDate "2006" }}
+
+  {{ range $grouped }}
+
+    <h2 class="photo-year">{{ .Key }}</h2>
+
+    <div class="photo-grid">
+      {{ range .Pages }}
+        <div class="photo-item">
+          <a href="{{ .Params.image }}">
+            <img src="{{ .Params.image }}" alt="{{ .Title }}">
+          </a>
+          <p class="caption">{{ .Params.caption }}</p>
+        </div>
+      {{ end }}
+    </div>
+
+  {{ end }}
+
+</div>
+
+{{ end }}

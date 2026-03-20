@@ -1,0 +1,302 @@
+/* =========================
+   🎨 NOTION BASE
+========================= */
+
+:root {
+  --bg: #191919;         /* page background */
+  --bg-soft: #202020;    /* cards/content */
+  --bg-code: #1a1a1a;
+
+  --text-main: #e6e6e6;
+  --text-dim: #a0a0a0;
+
+  --accent: #a78bfa;
+  --accent-soft: #c4b5fd;
+
+  --border: #2a2a2a;
+}
+
+/* =========================
+   🧱 GLOBAL
+========================= */
+
+body {
+  background-color: var(--bg);
+  color: var(--text-main);
+}
+
+/* =========================
+   📦 LAYOUT
+========================= */
+
+/* Sidebar width */
+.main-container {
+  grid-template-columns: 220px minmax(0, 1fr) !important;
+}
+
+/* Remove right sidebar */
+.right-sidebar {
+  display: none !important;
+}
+
+/* =========================
+   📁 SIDEBAR (Notion style)
+========================= */
+
+.sidebar {
+  background: #191919 !important;
+  border-right: none !important;
+}
+
+/* Remove theme layers */
+.sidebar * {
+  background: transparent !important;
+}
+
+/* Nav items */
+.sidebar .menu li a {
+  display: flex;
+  align-items: center;
+
+  padding: 4px 6px;
+  border-radius: 6px;
+
+  color: #b4a7f5 !important;  /* soft purple */
+  font-size: 14px;
+}
+
+
+/* Remove hover completely */
+.sidebar .menu li a:hover {
+  background: transparent !important;
+  color: var(--text-main) !important;
+}
+
+/* Active item (ONLY place purple appears) */
+.sidebar .menu li.active > a {
+  color: var(--accent) !important;
+  font-weight: 600;
+}
+
+.sidebar .menu li.active > a::before {
+  background-color: var(--accent);
+}
+
+/* =========================
+   📄 CONTENT (Notion feel)
+========================= */
+
+.main article {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+/* Cards */
+.article,
+.card {
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+/* Paragraphs */
+.article p {
+  color: var(--text-main);
+  line-height: 1.75;
+}
+
+/* Headings */
+.article h1,
+.article h2,
+.article h3 {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* Code */
+pre,
+code {
+  background: var(--bg-code);
+  border: 1px solid var(--border);
+  color: #d4d4d4;
+}
+
+/* Blockquote */
+blockquote {
+  border-left: 3px solid var(--border);
+  color: var(--text-dim);
+}
+
+/* =========================
+   🔗 LINKS (purple accent)
+========================= */
+
+.article a {
+  color: var(--accent);
+}
+
+.article a:hover {
+  color: var(--accent-soft);
+  text-decoration: underline;
+}
+
+/* =========================
+   🧼 CLEANUP
+========================= */
+
+.breadcrumb {
+  display: none;
+}
+
+.article-meta {
+  opacity: 0.5;
+}
+
+
+/* =========================
+   🏠 HOMEPAGE (Notion style)
+========================= */
+
+.home-content {
+  max-width: 700px;
+
+  /* push it closer to sidebar */
+  margin-left: 20px;
+  margin-top: 40px;
+
+  padding: 0;
+}
+
+/* remove card look */
+.home-content {
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* text styling */
+.home-content p {
+  font-size: 16px;
+  line-height: 1.8;
+  color: #e6e6e6;
+}
+
+.accent {
+  color: #a78bfa !important;;
+}
+
+/* =========================
+   ✍️ TYPOGRAPHY (Notion-like spacing)
+========================= */
+
+/* Paragraphs */
+.article p,
+.home-content p {
+  line-height: 1.8;
+  margin-bottom: 16px;
+}
+
+/* Headings */
+.article h1,
+.home-content h1 {
+  margin-bottom: 20px;
+}
+
+.article h2,
+.article h3,
+.home-content h2,
+.home-content h3 {
+  margin-top: 28px;
+  margin-bottom: 12px;
+}
+
+/* Lists */
+.article ul,
+.article ol,
+.home-content ul,
+.home-content ol {
+  margin: 16px 0;
+  padding-left: 22px;
+}
+
+.article li,
+.home-content li {
+  margin-bottom: 8px;
+  line-height: 1.7;
+}
+
+/* Add space after lists */
+.article ul + p,
+.home-content ul + p {
+  margin-top: 16px;
+}
+
+/* Block spacing between sections */
+.article > *,
+.home-content > * {
+  margin-bottom: 14px;
+}
+
+
+/* =========================
+   🚧 Coming Soon
+========================= */
+
+.coming-soon {
+  max-width: 700px;
+  margin-left: 20px;
+  margin-top: 40px;
+}
+
+.coming-text {
+  font-size: 18px;
+  color: #a78bfa;
+  margin-top: 12px;
+}
+
+
+/* =========================
+   📸 PHOTO GALLERY
+========================= */
+
+.photo-gallery {
+  max-width: 800px;
+  margin-left: 20px;
+}
+
+/* Year heading */
+.photo-year {
+  margin-top: 32px;
+  margin-bottom: 12px;
+  font-size: 20px;
+  color: #a78bfa;
+}
+
+/* Grid */
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+/* Image */
+.photo-item img {
+  width: 100%;
+  border-radius: 6px;
+  border: 1px solid #2a2a2a;
+}
+
+/* Caption */
+.caption {
+  font-size: 13px;
+  color: #a0a0a0;
+  margin-top: 6px;
+}
+
+.photo-item img {
+  transition: transform 0.2s ease;
+}
+
+.photo-item img:hover {
+  transform: scale(1.02);
+}

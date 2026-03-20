@@ -1,0 +1,19 @@
+{{ define "main" }}
+
+<div class="coming-soon">
+
+  <h1>{{ .Title }}</h1>
+
+  {{ if eq (len .Pages) 0 }}
+    <p class="coming-text">Coming Soon ✨</p>
+  {{ else }}
+    {{ range .Pages }}
+      <div>
+        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+      </div>
+    {{ end }}
+  {{ end }}
+
+</div>
+
+{{ end }}

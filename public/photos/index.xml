@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Photos on Adhit</title>
+        <link>http://localhost:1313/photos/</link>
+        <description>Recent content in Photos on Adhit</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en-us</language>
+        <lastBuildDate>Sat, 27 Dec 2025 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/photos/index.xml" rel="self" type="application/rss+xml" /><item>
+            <title>Inner pillars (Warangal)</title>
+            <link>http://localhost:1313/photos/thousand_pillars2/</link>
+            <pubDate>Sat, 27 Dec 2025 00:00:00 +0000</pubDate>
+            <guid>http://localhost:1313/photos/thousand_pillars2/</guid>
+            <description></description>
+        </item><item>
+            <title>Kakatiya Architecture (Warangal)</title>
+            <link>http://localhost:1313/photos/kakatiya_architecture/</link>
+            <pubDate>Sat, 27 Dec 2025 00:00:00 +0000</pubDate>
+            <guid>http://localhost:1313/photos/kakatiya_architecture/</guid>
+            <description></description>
+        </item><item>
+            <title>Thousand Pillars Temple (Warangal)</title>
+            <link>http://localhost:1313/photos/thousand_pillars1/</link>
+            <pubDate>Sat, 27 Dec 2025 00:00:00 +0000</pubDate>
+            <guid>http://localhost:1313/photos/thousand_pillars1/</guid>
+            <description></description>
+        </item></channel>
+</rss>
