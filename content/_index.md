@@ -1,8 +1,8 @@
 ---
 title: "Hi, I'm Adhit"
 ---
-# <span class="accent">About Me</span>
-Hi there! I'm <span class="accent">**Adhit**</span> (Pronounced: AH-dhee-t if that's hard, call me Adi). Growing up, I was always fascinated by hacking and cybersecurity. I started exploring cybersecurity and working on various projects, then pivoted to Machine Learning and AI. I explored topics such as time-series modelling, AI safety, Mechanistic Interpretability, and Natural Language processing. I had varying interests initially, but now I am much more focused on the following topics: 
+# About Me
+Hi there! I'm **Adhit** (Pronounced: AH-dhee-t if that's hard, call me Adi). Growing up, I was always fascinated by hacking and cybersecurity. I started exploring cybersecurity and working on various projects, then pivoted to Machine Learning and AI. I explored topics such as time-series modelling, AI safety, Mechanistic Interpretability, and Natural Language processing. I had varying interests initially, but now I am much more focused on the following topics: 
 
 - <span class="accent">Reinforcement Learning </span>
 
