@@ -3,8 +3,8 @@
 ========================= */
 
 :root {
-  --bg: #191919;         /* page background */
-  --bg-soft: #202020;    /* cards/content */
+  --bg: #191919;
+  --bg-soft: #202020;
   --bg-code: #1a1a1a;
 
   --text-main: #e6e6e6;
@@ -29,31 +29,27 @@ body {
    📦 LAYOUT
 ========================= */
 
-/* Sidebar width */
 .main-container {
   grid-template-columns: 220px minmax(0, 1fr) !important;
 }
 
-/* Remove right sidebar */
 .right-sidebar {
   display: none !important;
 }
 
 /* =========================
-   📁 SIDEBAR (Notion style)
+   📁 SIDEBAR
 ========================= */
 
 .sidebar {
-  background: #191919 !important;
+  background: var(--bg) !important;
   border-right: none !important;
 }
 
-/* Remove theme layers */
 .sidebar * {
   background: transparent !important;
 }
 
-/* Nav items */
 .sidebar .menu li a {
   display: flex;
   align-items: center;
@@ -61,29 +57,24 @@ body {
   padding: 4px 6px;
   border-radius: 6px;
 
-  color: #b4a7f5 !important;  /* soft purple */
+  color: #b4a7f5 !important;
   font-size: 14px;
 }
 
-
-/* Remove hover completely */
+/* Remove hover noise */
 .sidebar .menu li a:hover {
   background: transparent !important;
   color: var(--text-main) !important;
 }
 
-/* Active item (ONLY place purple appears) */
+/* Active */
 .sidebar .menu li.active > a {
   color: var(--accent) !important;
   font-weight: 600;
 }
 
-.sidebar .menu li.active > a::before {
-  background-color: var(--accent);
-}
-
 /* =========================
-   📄 CONTENT (Notion feel)
+   📄 CONTENT
 ========================= */
 
 .main article {
@@ -91,7 +82,6 @@ body {
   margin: 0 auto;
 }
 
-/* Cards */
 .article,
 .card {
   background: var(--bg-soft);
@@ -100,103 +90,56 @@ body {
 }
 
 /* Paragraphs */
-.article p {
+.article p,
+.home-content p {
   color: var(--text-main);
-  line-height: 1.75;
-}
-
-/* Headings */
-.article h1,
-.article h2,
-.article h3 {
-  color: #ffffff;
-  font-weight: 600;
-}
-
-/* Code */
-pre,
-code {
-  background: var(--bg-code);
-  border: 1px solid var(--border);
-  color: #d4d4d4;
-}
-
-/* Blockquote */
-blockquote {
-  border-left: 3px solid var(--border);
-  color: var(--text-dim);
+  line-height: 1.8;
+  margin-bottom: 16px;
 }
 
 /* =========================
-   🔗 LINKS (purple accent)
+   🟣 ACCENT TYPOGRAPHY
 ========================= */
 
-.article a {
+/* Headings */
+.article h1,
+.home-content h1 {
+  color: #ffffff;
+}
+
+.article h2,
+.article h3,
+.article h4,
+.home-content h2,
+.home-content h3,
+.home-content h4 {
   color: var(--accent);
 }
 
-.article a:hover {
+/* Bold */
+.article strong,
+.home-content strong {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* Links */
+.article a,
+.home-content a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.article a:hover,
+.home-content a:hover {
   color: var(--accent-soft);
   text-decoration: underline;
 }
 
 /* =========================
-   🧼 CLEANUP
+   ✍️ TYPOGRAPHY SPACING
 ========================= */
 
-.breadcrumb {
-  display: none;
-}
-
-.article-meta {
-  opacity: 0.5;
-}
-
-
-/* =========================
-   🏠 HOMEPAGE (Notion style)
-========================= */
-
-.home-content {
-  max-width: 700px;
-
-  /* push it closer to sidebar */
-  margin-left: 20px;
-  margin-top: 40px;
-
-  padding: 0;
-}
-
-/* remove card look */
-.home-content {
-  background: none !important;
-  border: none !important;
-  box-shadow: none !important;
-}
-
-/* text styling */
-.home-content p {
-  font-size: 16px;
-  line-height: 1.8;
-  color: #e6e6e6;
-}
-
-.accent {
-  color: #a78bfa !important;;
-}
-
-/* =========================
-   ✍️ TYPOGRAPHY (Notion-like spacing)
-========================= */
-
-/* Paragraphs */
-.article p,
-.home-content p {
-  line-height: 1.8;
-  margin-bottom: 16px;
-}
-
-/* Headings */
 .article h1,
 .home-content h1 {
   margin-bottom: 20px;
@@ -210,7 +153,6 @@ blockquote {
   margin-bottom: 12px;
 }
 
-/* Lists */
 .article ul,
 .article ol,
 .home-content ul,
@@ -225,21 +167,44 @@ blockquote {
   line-height: 1.7;
 }
 
-/* Add space after lists */
 .article ul + p,
 .home-content ul + p {
   margin-top: 16px;
 }
 
-/* Block spacing between sections */
 .article > *,
 .home-content > * {
   margin-bottom: 14px;
 }
 
+/* =========================
+   💻 CODE + BLOCKQUOTE
+========================= */
+
+pre,
+code {
+  background: var(--bg-code);
+  border: 1px solid var(--border);
+  color: #d4d4d4;
+}
+
+blockquote {
+  border-left: 3px solid var(--border);
+  color: var(--text-dim);
+}
 
 /* =========================
-   🚧 Coming Soon
+   🏠 HOMEPAGE
+========================= */
+
+.home-content {
+  max-width: 700px;
+  margin-left: 20px;
+  margin-top: 40px;
+}
+
+/* =========================
+   🚧 COMING SOON
 ========================= */
 
 .coming-soon {
@@ -250,10 +215,9 @@ blockquote {
 
 .coming-text {
   font-size: 18px;
-  color: #a78bfa;
+  color: var(--accent);
   margin-top: 12px;
 }
-
 
 /* =========================
    📸 PHOTO GALLERY
@@ -264,39 +228,44 @@ blockquote {
   margin-left: 20px;
 }
 
-/* Year heading */
 .photo-year {
   margin-top: 32px;
   margin-bottom: 12px;
   font-size: 20px;
-  color: #a78bfa;
+  color: var(--accent);
 }
 
-/* Grid */
 .photo-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 16px;
 }
 
-/* Image */
 .photo-item img {
   width: 100%;
   border-radius: 6px;
-  border: 1px solid #2a2a2a;
-}
-
-/* Caption */
-.caption {
-  font-size: 13px;
-  color: #a0a0a0;
-  margin-top: 6px;
-}
-
-.photo-item img {
+  border: 1px solid var(--border);
   transition: transform 0.2s ease;
 }
 
 .photo-item img:hover {
   transform: scale(1.02);
+}
+
+.caption {
+  font-size: 13px;
+  color: var(--text-dim);
+  margin-top: 6px;
+}
+
+/* =========================
+   🧼 CLEANUP
+========================= */
+
+.breadcrumb {
+  display: none;
+}
+
+.article-meta {
+  opacity: 0.5;
 }
