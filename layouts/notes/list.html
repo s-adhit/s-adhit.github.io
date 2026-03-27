@@ -1,0 +1,25 @@
+{{ define "main" }}
+
+<div class="home-content">
+
+  <!-- Title -->
+  <h1>{{ .Title }}</h1>
+
+  <!-- Intro content from _index.md -->
+  <div class="page-content">
+    {{ .Content }}
+  </div>
+
+  <!-- Notes list -->
+  <ul class="notes-list">
+    {{ range .Pages.ByDate.Reverse }}
+      <li>
+        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+        <span class="note-date">{{ .Date.Format "2006-01-02" }}</span>
+      </li>
+    {{ end }}
+  </ul>
+
+</div>
+
+{{ end }}

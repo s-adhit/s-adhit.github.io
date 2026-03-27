@@ -3,6 +3,15 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>http://localhost:1313/</loc>
+    <lastmod>2026-03-27T15:29:40+05:30</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/notes/</loc>
+    <lastmod>2026-03-27T15:29:40+05:30</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/notes/vector-field/</loc>
+    <lastmod>2026-03-27T15:29:40+05:30</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/photos/ganesh_warangal/</loc>
     <lastmod>2025-12-27T00:00:00+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/photos/thousand_pillars2/</loc>
@@ -14,14 +23,27 @@
     <loc>http://localhost:1313/photos/</loc>
     <lastmod>2025-12-27T00:00:00+00:00</lastmod>
   </url><url>
+    <loc>http://localhost:1313/photos/architecture_warangal/</loc>
+    <lastmod>2025-12-27T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/photos/statue_warangal/</loc>
+    <lastmod>2025-12-27T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>http://localhost:1313/photos/thousand_pillars1/</loc>
     <lastmod>2025-12-27T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/photos/dubai_cat/</loc>
+    <lastmod>2024-12-21T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/photos/coffee_machine/</loc>
+    <lastmod>2024-12-21T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/photos/coffee_shop/</loc>
+    <lastmod>2024-12-21T00:00:00+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/blog/</loc>
   </url><url>
     <loc>http://localhost:1313/categories/</loc>
-  </url><url>
-    <loc>http://localhost:1313/notes/</loc>
   </url><url>
     <loc>http://localhost:1313/research/</loc>
   </url><url>

@@ -6,6 +6,12 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
         <lastBuildDate>Sat, 27 Dec 2025 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/photos/index.xml" rel="self" type="application/rss+xml" /><item>
+            <title>Ganesh statue (Warangal)</title>
+            <link>http://localhost:1313/photos/ganesh_warangal/</link>
+            <pubDate>Sat, 27 Dec 2025 00:00:00 +0000</pubDate>
+            <guid>http://localhost:1313/photos/ganesh_warangal/</guid>
+            <description></description>
+        </item><item>
             <title>Inner pillars (Warangal)</title>
             <link>http://localhost:1313/photos/thousand_pillars2/</link>
             <pubDate>Sat, 27 Dec 2025 00:00:00 +0000</pubDate>
@@ -18,10 +24,40 @@
             <guid>http://localhost:1313/photos/kakatiya_architecture/</guid>
             <description></description>
         </item><item>
+            <title>statue (Warangal)</title>
+            <link>http://localhost:1313/photos/architecture_warangal/</link>
+            <pubDate>Sat, 27 Dec 2025 00:00:00 +0000</pubDate>
+            <guid>http://localhost:1313/photos/architecture_warangal/</guid>
+            <description></description>
+        </item><item>
+            <title>statue (Warangal)</title>
+            <link>http://localhost:1313/photos/statue_warangal/</link>
+            <pubDate>Sat, 27 Dec 2025 00:00:00 +0000</pubDate>
+            <guid>http://localhost:1313/photos/statue_warangal/</guid>
+            <description></description>
+        </item><item>
             <title>Thousand Pillars Temple (Warangal)</title>
             <link>http://localhost:1313/photos/thousand_pillars1/</link>
             <pubDate>Sat, 27 Dec 2025 00:00:00 +0000</pubDate>
             <guid>http://localhost:1313/photos/thousand_pillars1/</guid>
+            <description></description>
+        </item><item>
+            <title>Cat (dubai)</title>
+            <link>http://localhost:1313/photos/dubai_cat/</link>
+            <pubDate>Sat, 21 Dec 2024 00:00:00 +0000</pubDate>
+            <guid>http://localhost:1313/photos/dubai_cat/</guid>
+            <description></description>
+        </item><item>
+            <title>Coffee Machine (dubai)</title>
+            <link>http://localhost:1313/photos/coffee_machine/</link>
+            <pubDate>Sat, 21 Dec 2024 00:00:00 +0000</pubDate>
+            <guid>http://localhost:1313/photos/coffee_machine/</guid>
+            <description></description>
+        </item><item>
+            <title>Coffee shop (dubai)</title>
+            <link>http://localhost:1313/photos/coffee_shop/</link>
+            <pubDate>Sat, 21 Dec 2024 00:00:00 +0000</pubDate>
+            <guid>http://localhost:1313/photos/coffee_shop/</guid>
             <description></description>
         </item></channel>
 </rss>

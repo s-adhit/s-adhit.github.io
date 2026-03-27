@@ -11,6 +11,8 @@ theme = "stack"
   
   showThemeToggle = false
 
+  showSocial = true
+
   [params.assets]
     customCSS = ["css/custom.css"]
 
@@ -21,7 +23,7 @@ theme = "stack"
     enabled = false
 
   [params.article]
-    math = false
+    math = true
     toc = false   #
 
   [params.colorScheme]
@@ -34,8 +36,21 @@ theme = "stack"
   [params.darkMode]
     enable = true
     default = "dark"
+  
+  [[params.social]]
+    name = "LinkedIn"
+    url = "https://linkedin.com/in/adhitsimhadri"
+    icon = "brand-linkedin"
 
-
+  [[params.social]]
+    name = "X"
+    url = "https://x.com/5_4dh1t"
+    icon = "brand-x"
+  [[params.social]]
+    name = "Github"
+    url = "https://github.com/s-adhit"
+    icon = "brand-Github"
+  
 # Navigation Menu
 [menu]
   [[menu.main]]

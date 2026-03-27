@@ -5,5 +5,11 @@
         <description>Recent content in Hi, I&#39;m Adhit on Adhit</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate></lastBuildDate><atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" /></channel>
+        <lastBuildDate>Fri, 27 Mar 2026 15:29:40 +0530</lastBuildDate><atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" /><item>
+            <title>Vector Field</title>
+            <link>http://localhost:1313/notes/vector-field/</link>
+            <pubDate>Fri, 27 Mar 2026 15:29:40 +0530</pubDate>
+            <guid>http://localhost:1313/notes/vector-field/</guid>
+            <description>&lt;div style=&#34;text-align: center;&#34;&gt;&#xA;  &lt;video autoplay loop muted playsinline src=&#34;http://localhost:1313/videos/Vector_Field.mp4&#34; width=&#34;400&#34;&gt;&#xA;  &lt;source src=&#34;public/images/Blog_images/Vector_Field.mp4&#34; type=&#34;video/mp4&#34;&gt;&#xA;  &lt;figcaption&gt;Visualization of a vector field built using manim.&lt;/figcaption&gt;&#xA;&lt;/div&gt;&#xA;&lt;p&gt;In simple terms, a vector field assigns every point (x,y) in a region a vector pointing in a certain direction, and when you input a point into a vector field, you get a vector function.&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;Definition&lt;/strong&gt;: Let $R$ be the region in the $xy$ plane. A Vector Field $\vec{F}$ assigns every point $(x,y)$ in $R$ a vector $\vec{F}(x,y)$ with two components.&lt;/p&gt;&#xA;&lt;p&gt;$$&#xA;\vec{F} = M(x,y)\hat{i} + N(x,y)\hat{j}&#xA;$$&lt;/p&gt;&#xA;&lt;p&gt;This plane vector field involves two functions of two variables. They are the&#xA;components $M$ and $N$, which vary from point to point. A vector has fixed&#xA;components; a vector field has varying components.&lt;/p&gt;&#xA;&lt;h2 id=&#34;intution&#34;&gt;Intution&#xD;&#xA;&lt;/h2&gt;&lt;p&gt;A real-life example of a vector field is wind blowing down the street. Every point in the street has its own wind velocity. If you walk with the wind, it does positive work; if you walk against it, it does negative work; and if you walk sideways, you&amp;rsquo;re not affected (zero work relative to the wind).&lt;/p&gt;&#xA;</description>
+        </item></channel>
 </rss>

@@ -257,7 +257,54 @@ blockquote {
   color: var(--text-dim);
   margin-top: 6px;
 }
+/* =========================
+   🧠 NOTES LIST
+========================= */
 
+.notes-list {
+  max-width: 700px;
+  margin-left: 20px;
+  margin-top: 40px;
+}
+
+/* bullets */
+.notes-list ul {
+  padding-left: 18px;
+}
+
+/* links */
+.notes-list a {
+  color: #a78bfa;
+  text-decoration: none;
+}
+
+/* hover */
+.notes-list a:hover {
+  color: #c4b5fd;
+  text-decoration: underline;
+}
+
+.notes-list {
+  margin-top: 16px;
+  padding-left: 18px;
+}
+
+.notes-list li {
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+
+.note-date {
+  margin-left: 8px;
+  font-size: 12px;
+  color: #888;
+}
+
+figcaption {
+  font-size: 12.5px;
+  color: #8a8f98;
+  font-style: italic;
+}
 /* =========================
    🧼 CLEANUP
 ========================= */
@@ -268,4 +315,44 @@ blockquote {
 
 .article-meta {
   opacity: 0.5;
+}
+
+.page-content {
+  margin-top: 16px;
+}
+
+.page-content p {
+  line-height: 1.8;
+  margin-bottom: 16px;
+}
+
+/* =========================
+   🔗 SIDEBAR SOCIALS
+========================= */
+
+.sidebar {
+  position: relative;
+}
+
+.sidebar-socials {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+
+  display: flex;
+  gap: 14px;
+}
+
+/* icon style */
+.sidebar-socials svg {
+  width: 18px;
+  height: 18px;
+
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+/* hover */
+.sidebar-socials svg:hover {
+  opacity: 1;
 }
