@@ -356,3 +356,138 @@ figcaption {
 .sidebar-socials svg:hover {
   opacity: 1;
 }
+
+/* =========================
+   MOBILE LAYOUT
+   Keep desktop Stack/sidebar styling intact; these rules only apply below
+   Stack's md breakpoint, where the sidebar becomes the mobile header.
+========================= */
+
+@media (max-width: 767.98px) {
+  html,
+  body {
+    max-width: 100%;
+    overflow-x: clip;
+  }
+
+  .main-container {
+    gap: 24px;
+    padding: 24px 16px 32px;
+  }
+
+  .left-sidebar {
+    margin-bottom: 0;
+  }
+
+  .sidebar header {
+    min-height: 44px;
+    padding-right: 52px;
+  }
+
+  #toggle-menu {
+    width: 44px;
+    min-height: 44px;
+    padding: 10px 7px;
+  }
+
+  #main-menu {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 20px 16px;
+    gap: 8px;
+  }
+
+  #main-menu li a {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 44px;
+    padding: 8px 6px;
+  }
+
+  /* Custom social links belong to the expanded mobile menu, not the header. */
+  .sidebar-socials {
+    position: static;
+    display: none;
+    gap: 14px;
+    margin: 0;
+    padding: 0 16px 20px;
+  }
+
+  #main-menu.show ~ .sidebar-socials {
+    display: flex;
+  }
+
+  .sidebar-socials a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+  }
+
+  .main article,
+  .article,
+  .card,
+  .home-content,
+  .coming-soon,
+  .notes-list,
+  .photo-gallery {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .home-content,
+  .coming-soon,
+  .notes-list,
+  .photo-gallery {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .photo-grid {
+    grid-template-columns: repeat(auto-fill, minmax(unquote("min(220px, 100%)"), 1fr));
+  }
+
+  .photo-item img,
+  .article-content img,
+  .article-content video,
+  .article-content iframe {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+
+  .article-content {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .article-content .gallery {
+    flex-wrap: wrap;
+  }
+
+  .article-content .gallery figure {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .article-content .highlight {
+    overflow-x: auto;
+  }
+
+  .article-content .table-wrapper,
+  .article-content .katex-display > .katex {
+    max-width: calc(100vw - 32px);
+  }
+
+  .article-content table {
+    min-width: 100%;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 3px;
+  }
+}
