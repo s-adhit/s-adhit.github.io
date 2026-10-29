@@ -1,0 +1,15 @@
+{{ define "main" }}
+
+<div class="coming-soon">
+
+  <h1>{{ .Title }}</h1>
+
+  {{ if eq (len .RegularPages) 0 }}
+    <p class="coming-text">Coming Soon ✨</p>
+  {{ else }}
+    {{ partial "tag-filter-list.html" . }}
+  {{ end }}
+
+</div>
+
+{{ end }}

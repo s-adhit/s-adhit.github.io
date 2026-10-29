@@ -1,0 +1,123 @@
+{{- $tagDefinitions := slice
+    (dict "label" "Machine Learning" "key" "machine learning")
+    (dict "label" "Deep Learning" "key" "deep learning")
+    (dict "label" "Transformers" "key" "transformers")
+    (dict "label" "Reinforcement Learning" "key" "reinforcement learning")
+    (dict "label" "Mathematics" "key" "mathematics")
+    (dict "label" "Linear Algebra" "key" "linear algebra")
+    (dict "label" "Probability" "key" "probability")
+    (dict "label" "Optimization" "key" "optimization")
+    (dict "label" "Generative Models" "key" "generative models")
+    (dict "label" "Diffusion" "key" "diffusion")
+    (dict "label" "VAEs" "key" "vaes")
+    (dict "label" "Reflections" "key" "reflections")
+    (dict "label" "Learning" "key" "learning")
+    (dict "label" "Research" "key" "research")
+-}}
+{{- $approvedKeys := slice -}}
+{{- range $tagDefinitions -}}
+  {{- $approvedKeys = $approvedKeys | append .key -}}
+{{- end -}}
+{{- $pages := .RegularPages.ByDate.Reverse -}}
+{{- $usedKeys := slice -}}
+{{- range $pages -}}
+  {{- with .Params.tags -}}
+    {{- range . -}}
+      {{- $tagKey := lower . -}}
+      {{- if and (in $approvedKeys $tagKey) (not (in $usedKeys $tagKey)) -}}
+        {{- $usedKeys = $usedKeys | append $tagKey -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- $listID := printf "%s-entry-list" .Section -}}
+
+{{- if gt (len $pages) 0 -}}
+  <div class="tag-filter" data-tag-filter>
+    <div class="tag-filter-buttons" role="group" aria-label="{{ .Title }} tag filters">
+      <button class="tag-filter-button" type="button" data-tag-filter-button data-tag="all" aria-pressed="true" aria-controls="{{ $listID }}">All</button>
+      {{- range $tagDefinitions -}}
+        {{- if in $usedKeys .key -}}
+          <button class="tag-filter-button" type="button" data-tag-filter-button data-tag="{{ .key }}" aria-pressed="false" aria-controls="{{ $listID }}">{{ .label }}</button>
+        {{- end -}}
+      {{- end -}}
+    </div>
+    <p class="tag-filter-status" data-tag-filter-status aria-live="polite"></p>
+  </div>
+{{- end -}}
+
+{{- if eq .Section "notes" -}}
+  <ul id="{{ $listID }}" class="notes-list" data-tag-filter-list>
+{{- else -}}
+  <div id="{{ $listID }}" class="blog-list" data-tag-filter-list>
+{{- end -}}
+  {{- range $pages -}}
+    {{- $pageTags := slice -}}
+    {{- with .Params.tags -}}
+      {{- range . -}}
+        {{- $tagKey := lower . -}}
+        {{- if in $approvedKeys $tagKey -}}
+          {{- $pageTags = $pageTags | append $tagKey -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+    {{- if eq $.Section "notes" -}}
+      <li data-tag-filter-item data-tags="{{ delimit $pageTags "|" }}">
+    {{- else -}}
+      <div data-tag-filter-item data-tags="{{ delimit $pageTags "|" }}">
+    {{- end -}}
+      <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+      <span class="note-date">{{ .Date.Format "2006-01-02" }}</span>
+    {{- if eq $.Section "notes" -}}
+      </li>
+    {{- else -}}
+      </div>
+    {{- end -}}
+  {{- end -}}
+{{- if eq .Section "notes" -}}
+  </ul>
+{{- else -}}
+  </div>
+{{- end -}}
+
+<style>
+  .tag-filter { max-width: 700px; margin-top: 24px; }
+  .home-content .tag-filter { margin-left: 20px; }
+  .tag-filter-buttons { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag-filter-button { padding: 4px 9px; border: 1px solid var(--border); border-radius: 6px; background: var(--bg-soft); color: var(--text-main); font: inherit; font-size: 13px; cursor: pointer; }
+  .tag-filter-button[aria-pressed="true"] { border-color: var(--accent); color: var(--accent-soft); }
+  .tag-filter-button:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+  .tag-filter-status { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
+  .blog-list { margin-top: 16px; }
+  .blog-list > div { margin-bottom: 8px; }
+  @media (max-width: 767.98px) { .home-content .tag-filter { margin-left: 0; } }
+</style>
+
+<script>
+  (() => {
+    const filter = document.querySelector('[data-tag-filter]');
+    const list = document.querySelector('[data-tag-filter-list]');
+    if (!filter || !list) return;
+
+    const buttons = Array.from(filter.querySelectorAll('[data-tag-filter-button]'));
+    const items = Array.from(list.querySelectorAll('[data-tag-filter-item]'));
+    const status = filter.querySelector('[data-tag-filter-status]');
+
+    const selectTag = selectedTag => {
+      let visibleCount = 0;
+      buttons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.tag === selectedTag)));
+      items.forEach(item => {
+        const tags = (item.dataset.tags || '').split('|').filter(Boolean);
+        const isVisible = selectedTag === 'all' || tags.includes(selectedTag);
+        item.hidden = !isVisible;
+        if (isVisible) visibleCount += 1;
+      });
+      if (status) {
+        const label = buttons.find(button => button.dataset.tag === selectedTag)?.textContent;
+        status.textContent = selectedTag === 'all' ? `Showing all ${visibleCount} entries.` : `Showing ${visibleCount} entries tagged ${label}.`;
+      }
+    };
+
+    buttons.forEach(button => button.addEventListener('click', () => selectTag(button.dataset.tag || 'all')));
+  })();
+</script>

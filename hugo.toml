@@ -3,6 +3,9 @@ languageCode = "en-us"
 title = "Adhit"
 theme = "stack"
 
+[taxonomies]
+  category = "categories"
+
 [pagination]
   pagerSize = 5
 

@@ -10,15 +10,7 @@
     {{ .Content }}
   </div>
 
-  <!-- Notes list -->
-  <ul class="notes-list">
-    {{ range .Pages.ByDate.Reverse }}
-      <li>
-        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
-        <span class="note-date">{{ .Date.Format "2006-01-02" }}</span>
-      </li>
-    {{ end }}
-  </ul>
+  {{ partial "tag-filter-list.html" . }}
 
 </div>
 

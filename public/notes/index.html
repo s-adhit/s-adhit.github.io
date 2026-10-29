@@ -156,15 +156,53 @@ window.MathJax = {
 
   </div>
 
-  
-  <ul class="notes-list">
-    
-      <li>
-        <a href="/notes/vector-field/">Vector Field</a>
-        <span class="note-date">2026-03-27</span>
-      </li>
-    
-  </ul>
+  <div class="tag-filter" data-tag-filter>
+    <div class="tag-filter-buttons" role="group" aria-label="Notes tag filters">
+      <button class="tag-filter-button" type="button" data-tag-filter-button data-tag="all" aria-pressed="true" aria-controls="notes-entry-list">All</button><button class="tag-filter-button" type="button" data-tag-filter-button data-tag="mathematics" aria-pressed="false" aria-controls="notes-entry-list">Mathematics</button></div>
+    <p class="tag-filter-status" data-tag-filter-status aria-live="polite"></p>
+  </div><ul id="notes-entry-list" class="notes-list" data-tag-filter-list><li data-tag-filter-item data-tags="mathematics"><a href="/notes/vector-field/">Vector Field</a>
+      <span class="note-date">2026-03-27</span></li></ul><style>
+  .tag-filter { max-width: 700px; margin-top: 24px; }
+  .home-content .tag-filter { margin-left: 20px; }
+  .tag-filter-buttons { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag-filter-button { padding: 4px 9px; border: 1px solid var(--border); border-radius: 6px; background: var(--bg-soft); color: var(--text-main); font: inherit; font-size: 13px; cursor: pointer; }
+  .tag-filter-button[aria-pressed="true"] { border-color: var(--accent); color: var(--accent-soft); }
+  .tag-filter-button:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+  .tag-filter-status { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
+  .blog-list { margin-top: 16px; }
+  .blog-list > div { margin-bottom: 8px; }
+  @media (max-width: 767.98px) { .home-content .tag-filter { margin-left: 0; } }
+</style>
+
+<script>
+  (() => {
+    const filter = document.querySelector('[data-tag-filter]');
+    const list = document.querySelector('[data-tag-filter-list]');
+    if (!filter || !list) return;
+
+    const buttons = Array.from(filter.querySelectorAll('[data-tag-filter-button]'));
+    const items = Array.from(list.querySelectorAll('[data-tag-filter-item]'));
+    const status = filter.querySelector('[data-tag-filter-status]');
+
+    const selectTag = selectedTag => {
+      let visibleCount = 0;
+      buttons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.tag === selectedTag)));
+      items.forEach(item => {
+        const tags = (item.dataset.tags || '').split('|').filter(Boolean);
+        const isVisible = selectedTag === 'all' || tags.includes(selectedTag);
+        item.hidden = !isVisible;
+        if (isVisible) visibleCount += 1;
+      });
+      if (status) {
+        const label = buttons.find(button => button.dataset.tag === selectedTag)?.textContent;
+        status.textContent = selectedTag === 'all' ? `Showing all ${visibleCount} entries.` : `Showing ${visibleCount} entries tagged ${label}.`;
+      }
+    };
+
+    buttons.forEach(button => button.addEventListener('click', () => selectTag(button.dataset.tag || 'all')));
+  })();
+</script>
+
 
 </div>
 
