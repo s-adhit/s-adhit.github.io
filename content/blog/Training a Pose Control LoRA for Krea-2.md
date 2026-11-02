@@ -93,6 +93,7 @@ references:
 In this blog, I explain the decisions and ideas that led me to train a Pose Control LoRA for Krea-2. The core architecture is a LoRA-based adaptation of Krea-2 with a modified input layer that accepts both the pose condition and the image latent. The final model release is the result of checkpoint interpolation between training steps 4000 and 4300.
 
 ![Final model showcase](/images/blog/krea2/hero.png)
+![Final model showcase](/images/blog/krea2/hero_condition.png)
 
 *Figure 1 — Hero collage.*
 
@@ -100,11 +101,11 @@ In this blog, I explain the decisions and ideas that led me to train a Pose Cont
 
 ## 1. Introduction
 
-Krea-2 is an open-weights image generation model designed with an emphasis on visual aesthetics and controllability through text prompts and image inputs{{< cite ref="krea2" >}}. I highly recommend reading the [Krea-2 Technical Report](https://www.krea.ai/blog/krea-2-technical-report) for a deeper understanding of the model's foundations, architectural lineage, and training methodology. At its core, Krea-2 builds on a multimodal flow-matching architecture, refined through an extensive training process to achieve high-quality image generation and flexible control over its outputs.
+Krea-2 is a 12B MMDiT-based open-weights image generation model focused on aesthetics and controllability through text and image inputs{{< cite ref="krea2" >}}. I recommend reading the Krea-2 Technical Report if you want a deeper understanding of the model and how it was trained.
 
-Text-only generation does not provide deterministic control over body layout, and pose is a useful conditioning signal because it helps separate geometry from appearance. The goal of this project is to use pose to control the broad body layout, while using text to control identity, clothing, environment, and visual style.
+Text-only generation does not give deterministic control over body layout, and pose is a useful conditioning signal because it helps separate geometry from appearance. The goal of this project is to use pose to control the broad body layout, while text controls identity, clothing, environment, and visual style.
 
-This project builds on Tanmay Patil's Krea-2 Depth ControlNet implementation{{< cite ref="krea2-depth-controlnet-lora" >}}, adapting the conditioning approach to human pose. I adapted that approach to human-pose conditioning and developed the pose dataset and preprocessing pipeline, training objective, finishing strategy, evaluation setup, and inference path discussed below.
+This project builds on Tanmay Patil's Krea-2 Depth ControlNet implementation{{< cite ref="krea2-depth-controlnet-lora" >}}. I adapted that conditioning approach to human pose and built the dataset, preprocessing pipeline, training setup, evaluation pipeline, and inference path discussed below.
 
 This is a fairly long blog, so in short, the following sections cover data preparation, architecture, the training objective, evaluations, results, and discussion.
 
@@ -112,70 +113,60 @@ This is a fairly long blog, so in short, the following sections cover data prepa
 
 ## 2. Data Preparation
 
-In this section, we will discuss data collection, pose generation (conditioning images), data review/cleanup, and captioning.  I spent about 3 weeks on this section and compiled a dataset of 17k images, poses, and captions, totaling about 10 GB. 
+Data preparation ended up being one of the most time-consuming parts of the project. I spent around three weeks collecting, cleaning, captioning, and reviewing the data. Around 36k candidate images were collected initially, which were reduced to 17,495 image–pose–caption samples after pose generation and manual review.
+
+{{< theme-image
+  light="/images/blog/krea2/Data_2.png"
+  dark="/images/blog/krea2/Data.png"
+  alt="Data preparation pipeline" >}}
+
+*Figure 2 — Data Preparation Pipeline.*
 
 ### 2.1 Dataset Collection
-Initially, I collected around 36k images, but after final cleanup and review, I reduced it to 17,495 images. I compiled the dataset from COCO{{< cite ref="coco" >}}, Danbooru{{< cite ref="danbooru" >}}, and Human-Art{{< cite ref="humanart" >}}. After pose generation, I manually reviewed the condition and source images and dropped those that did not meet accuracy and quality standards, resulting in 17,495 images. I cannot share the full dataset because of mixed licenses, but I have made a portion public on Hugging Face ([PoseBridge](https://huggingface.co/datasets/adhit-420/PoseBridge)), and the data preprocessing is available on my GitHub ([PoseBridge Pre-processing](https://github.com/s-adhit/PoseBridge)). My main priority was data diversity. I sourced human images from COCO (person category), anime images from Danbooru, and sculptures and paintings (digital art, stained glass, oil paintings, cartoons, and Ukiyo-e) from Human-art. For pose diversity among real humans, I sourced additional real human data from the Human-art dataset in the Dances and Acrobatics category. 
+I collected data from COCO{{< cite ref="coco" >}}, Danbooru{{< cite ref="danbooru" >}}, and Human-Art{{< cite ref="humanart" >}}. The main goal was diversity in both pose and visual style.
+
+COCO contributed photoreal images, Danbooru added anime images, and Human-Art provided paintings, sculptures, dance, and acrobatic poses. After pose generation, I manually reviewed the source image together with its corresponding pose condition and removed inaccurate or low-quality samples.
+
+The final dataset contains 17,495 samples. Because of mixed licenses, I cannot share the complete dataset, but a portion is available on Hugging Face as [PoseBridge](https://huggingface.co/datasets/adhit-420/PoseBridge), and the preprocessing pipeline is available on GitHub at [PoseBridge Pre-processing](https://github.com/s-adhit/PoseBridge). 
 
 
-**Table 1 — Dataset Split and Source Distribution**
 
-| Split / source | Images | Share | Notes |
-| --- | --- | --- | --- |
-| Training | 16582 | ~94.78% | The Trainset |
-| Validation | 865 | ~5.08% | I initially used it for validation testing, but in later training, I removed the validation loss calculation; therefore, none of the poses here were seen during training, and I sampled them using stratified sampling. Later for final evals I picked some poses from here |
-| Diagnostic Testing | 48 | ~0.13% | I picked these images to test pose generalization between training checkpoints. I used these poses for evaluation. |
-| COCO  (Photoreal) | 3893 | ~22.25% | COCO PhotoReal included a wide range of images with varying quality, sampled by person category in COCO. |
-| Danbooru (anime) | 2255 | ~12.89% | Danbooru has a variety of anime poses in different aspect ratios, sampled while excluding explicit content tags. |
-| Human-Art real-human | 3257 | ~18.61% | Acrobatic and Dance poses are mainly used to teach the model difficult poses. |
-| Human-Art Painting | 6502 | ~37.16% | Various paintings/digital art sets to add style diversity to the training set. |
-| Human-Art Sculpture | 1588 | ~9.07% | The sculptures featured a variety of poses used to teach the model sculpture poses. |
+**Table 1 — Dataset Source Distribution**
+
+| Source | Images | Share |
+| --- | ---: | ---: |
+| COCO | 3,893 | ~22.25% |
+| Danbooru | 2,255 | ~12.89% |
+| Human-Art Real Human | 3,257 | ~18.61% |
+| Human-Art Painting | 6,502 | ~37.16% |
+| Human-Art Sculpture | 1,588 | ~9.07% |
 
 
 
 ![Dataset montage](/images/blog/krea2/dataset-montage.png)
 
-*Figure 2 — Dataset montage.*
+*Figure 3 — Dataset montage.*
 
 ### 2.2 Pose Representation
 
-Before choosing a keypoint structure for the pose skeleton, I experimented with different keypoint configurations (e.g., 21 keypoints + hands, face + hand representation). To keep it simple, I used COCO’s 17-keypoint format for the entire dataset, which was used in both the ControlNet {{< cite ref="controlnet" >}} and OpenPose {{< cite ref="openpose" >}} papers for pose estimation. I used the existing COCO and Human-Art annotations to map them to the 17 points. For the Danbooru set, I sampled over 10,000 images, applied a DWpose {{< cite ref="dwpose" >}} detector to all of them, manually reviewed pose and image quality, and removed low-quality samples. The appendix table shows the keypoints and their corresponding colors. See [Appendix A: Keypoints and Color Mapping](#a-keypoints-and-color-mapping).
+I experimented with richer pose representations, including hands and facial keypoints, but eventually standardized the dataset to the COCO 17-keypoint format.
+
+Existing annotations from COCO and Human-Art were mapped to this representation. For Danbooru images, DWPose{{< cite ref="dwpose" >}} was used to estimate the keypoints, followed by manual review of the generated pose conditions.
+
+The final representation focuses on broad body structure rather than detailed hands, fingers, or facial expressions. The full keypoint and color mapping is available in [Appendix A: Keypoints and Color Mapping](#a-keypoints-and-color-mapping).
 
 
 ![RGB to pose condition](/images/blog/krea2/dataset_condition_montage.png)
 
-*Figure 3 — Pose montage*
+*Figure 4 — Pose montage*
 
 ### 2.3 Captioning
 
-For captioning, I initially tested BLIP{{< cite ref="blip" >}}, which was originally used for captions on the Human-Art dataset, but it didn't meet the quality I was looking for. The other model I tested was `Qwen3-VL 3B`{{< cite ref ="qwen3vl">}}, which is close to the Krea-2 encoder, but ultimately the best-quality results I got were from Gemini `gemini-3.5-flash-lite`{{< cite ref ="gemini">}} (Total cost for captioning with the Gemini API was about 10 USD). 
+I initially tested BLIP{{< cite ref="blip" >}} and `Qwen3-VL 3B`{{< cite ref="qwen3vl" >}} for captioning, but the best results came from Gemini `gemini-3.5-flash-lite`{{< cite ref="gemini" >}}. The total captioning cost was roughly $10.
 
-The main goal of captioning was for the captions to describe only the style and what's in the image, but they would describe the posing and framing of the subjects in the image. The prompt shouldn't influence the pose in the image. The pose should come only from the conditioning image. 
+The main goal was for captions to describe appearance, clothing, environment, and style without describing the subject's pose or framing. The pose should come from the conditioning image rather than the text.
 
-**Excluded Pose and Framing Words**
-
-```python
-POSE_WORDS = [
-    "stand", "standing", "sit", "sitting", "seated", "seat", "kneel", "kneeling",
-    "lying", "laying", "lay", "walk", "walking", "run", "running", "jump", "jumping",
-    "crouch", "crouching", "bend", "bending", "bent", "lean", "leaning", "reach",
-    "reaching", "stretch", "stretching", "pose", "posing", "gesture", "gesturing",
-    "arms crossed", "legs crossed", "looking back", "over her shoulder",
-    "over his shoulder", "turned", "twisted", "squat", "squatting", "hands on hips",
-    "tiptoe", "dancing", "stance", "posture", "curled", "arched", "tilted", "propped",
-    "straddling", "prone", "supine", "upright", "reclining", "hunched", "slouch",
-    "raised arm", "raised arms", "outstretched", "mid-stride", "mid-flight",
-    "extended forward", "riding", "ride", "astride", "mounted", "mounting", "perched",
-]
-
-FRAMING_WORDS = [
-    "close-up", "close up", "medium shot", "wide shot", "full shot", "full-length shot",
-    "medium close-up", "extreme close-up", "headshot", "head shot", "portrait shot",
-    "portrait-style", "cowboy shot", "waist up", "waist-up", "knees up", "knees-up",
-    "chest up", "shoulders up", "from the waist", "entire figure", "entire statue",
-    "full body shot", "full-body shot", "full-length",
-]
-```
+Pose-related and framing-related words were filtered from the generated captions. The complete filtering lists are included in the [Appendix B: Caption Filtering Rules](#appendix-b--caption-filtering-rules).
 
 **Example Caption**
 
@@ -184,26 +175,26 @@ FRAMING_WORDS = [
  
 ![Image taken from COCO dataset](images/blog/krea2/image.png)
 
-*Figure 4 — Example image and generated caption.*
+*Figure 5 — Example image and generated caption.*
  
 
 
 
 ### 2.4 Aspect-Ratio Buckets and Geometry
 
-Following a bucketed aspect-ratio training approach similar to Tanmay’s krea2 Depth controlnet lora {{< cite ref ="krea2-depth-controlnet-lora">}}. I mapped images to their nearest resolution bucket and grouped them into uniform batches to preserve native geometry. To optimize compute throughput and drastically reduce training time for the portrait-heavy dataset, I trained at a 768px base resolution rather than 1 MP. This trade-off delivers high training speed with negligible crop loss. Bucket aspect-ratio training maps images to the closest buckets and shards them together. I handled extreme portrait and landscape instances with threshold detection, boundary bucket mapping, and paired center-cropping. At inference, the model generalizes to native image generation without distortion.
+Instead of forcing every image into a square resolution, I used aspect-ratio buckets similar to the approach used in Tanmay Patil's Krea-2 Depth ControlNet LoRA{{< cite ref="krea2-depth-controlnet-lora" >}}.
 
+Images were assigned to the nearest 768px-resolution bucket so that training could preserve more of the original image geometry.
 **Table 2 — Dataset Aspect-Ratio Distribution**
 
-| **Category** | **Aspect Ratio Range** | **Image Count** | **Dataset Share** |
-| --- | --- | --- | --- |
-| **Portrait** | $AR < 0.98$ | 9,855 | 56.33% |
-| **Landscape** | $AR > 1.02$ | 6,879 | 39.32% |
-| **Square** | $0.98 \le AR \le 1.02$ | 761 | 4.35% |
-| **Extreme Portrait** *(Subset)* | $AR \le 0.50$ | 978 | 5.59% |
-| **Extreme Landscape** *(Subset)* | $AR \ge 2.00$ | 113 | 0.65% |
-| **Total Dataset** | **All** | **17,495** | **100.00%**
- |
+| Category | Aspect Ratio Range | Images | Share |
+| --- | --- | ---: | ---: |
+| Square | $0.98 \le AR \le 1.02$ | 761 | 4.35% |
+| Portrait | $0.50 < AR < 0.98$ | 8,854 | 50.61% |
+| Landscape | $1.02 < AR < 2.00$ | 6,733 | 38.49% |
+| Extreme Portrait | $AR \le 0.50$ | 1,001 | 5.72% |
+| Extreme Landscape | $AR \ge 2.00$ | 146 | 0.83% |
+| **Total** | **All** | **17,495** | **100.00%** |
 
 ---
 
@@ -211,13 +202,34 @@ Following a bucketed aspect-ratio training approach similar to Tanmay’s krea2 
 
 The architecture was adapted from Tanmay's Depth-Control Lora {{< cite ref ="krea2-depth-controlnet-lora">}} which takes any image and a Depth map and adapts it to a new generation while preserving the same 3D structure. I followed the same pattern, but instead we give a pose skeleton, and it steers the image with a prompt towards the Pose. The Krea-2 Backbone is frozen; the only difference from the original Krea-2 is that the Input Layer is modified to take the Pose latent and image latent, rather than only the image latent. 
 
-![Architecture diagram](/images/blog/krea2/architecture.png)
+{{< theme-image
+  light="/images/blog/krea2/architecture_2.png"
+  dark="/images/blog/krea2/architecture.png"
+  alt="Krea-2 Pose Control LoRA architecture diagram"
+>}}
 
-*Figure 5 — Pose Control LoRA architecture for Krea-2.*
+
+*Figure 6 — Pose Control LoRA architecture for Krea-2.*
 
 ### 3.1 Pose-Control Injection
 
-The pose condition and target image are encoded separately into the pose latent and the noisy image latent, respectively. The pose latent is kept clean, while the image is encoded with time-step noise. The input control layer is modified to accept the concatenated pose and noisy image latents along the feature dimension. This doubles the input width seen by the first projection layer (64→128), so the original Krea-2 input projection is replaced by a trainable expanded  `ControlInputLayer`that maps the concatenated representation back to the model width. From there, the frozen Krea-2 single-stream transformer backbone processes the representation. Adaptation is performed through rank-64 LoRA{{< cite ref ="lora">}} modules attached to `attn.{wq,wk,wv,gate,wo}`and  `mlp.{gate,up,down}`across all 28 transformer blocks. The backbone weights remain frozen; only the expanded control input projection and the LoRA adapters are trained.
+The pose condition is encoded with the Qwen-Image VAE and kept as a clean control latent.
+
+#### Training time
+
+During training, the target image is encoded into a latent \(x_0\). Gaussian noise \(\epsilon\) is sampled and mixed with the image latent using the shifted timestep \(t\):
+
+\[
+x_t = t\epsilon + (1-t)x_0
+\]
+
+The clean pose latent is then concatenated with \(x_t\). This doubles the input width from 64 to 128, so the original Krea-2 input projection is replaced with a trainable `ControlInputLayer`.
+
+#### Inference time
+
+At inference, there is no target image. Generation starts directly from Gaussian latent noise. At each denoising step, the current image latent is concatenated with the same clean pose latent before being passed through the expanded input layer.
+
+The rest of Krea-2 remains frozen, while rank-64 LoRA{{< cite ref="lora" >}} adapters are trained across all 28 transformer blocks. Only the expanded input layer and LoRA adapters are trainable.
 
 ### 3.2 Trainable Parameters
 
@@ -351,9 +363,13 @@ The model was trained on Krea-2 Raw with the backbone frozen. The input projecti
 
 ### 4.4 Training Stages
 
-The total training time was `17 hours and 51 minutes`. The initial training was performed for 3000 steps, with a 200-step warmup to 1e-4. From step 3000, a cooldown was performed until step 5000. After generating images, visually inspecting them, and comparing all the evaluation metrics every 100 steps, the best pose adherence was achieved at step 4000.
+The total training time was `17 hours and 51 minutes`. Training was done on **Krea-2 Raw**, while visual evaluations were performed using **Krea-2 Turbo**, following the setup recommended in the official Krea-2 repository {{< cite ref="krea2" >}}.
 
-For the final control, another cooldown from`2e-5` to `5e-6` was performed until step 4500. After manually inspecting the checkpoints at 100-step intervals and comparing them visually, the checkpoint at step 4300 performed better in terms of creativity, while the checkpoint at step 4000 had better pose adherence. The final release was a mix of 25% of the step-4300 checkpoint and 75% of the step-4000 parent checkpoint, which performed the best among all the checkpoints.
+The initial training ran for 3000 steps, with a 200-step warmup to `1e-4`. From step 3000, the learning rate was cooled down until step 5000. I generated samples and compared the evaluation metrics every 100 steps, and step 4000 gave the best pose adherence.
+
+For the final stage, I ran another cooldown from `2e-5` to `5e-6` until step 4500. After manually comparing the checkpoints at 100-step intervals, step 4300 looked better in terms of creativity, while step 4000 had better pose adherence.
+
+The final release is an interpolation of these two checkpoints: **75% step 4000 + 25% step 4300**, which gave the best overall result.
 
 **Table 6 — Training Stages and Learning-Rate Schedules**
 
@@ -487,7 +503,7 @@ The below figures are generations across different prompts and conditions of ima
 
 ![Generation examples](/images/blog/krea2/generations.png)
 
-*Figure 6 — Generations across different prompts and pose conditions.*
+*Figure 7 — Generations across different prompts and pose conditions.*
 
 ### 6.3 Prompting Behavior
 
@@ -580,23 +596,52 @@ Throughout the project, I used AI tools such as Codex to help write code and set
 | **16** | `(255, 0, 170)` | Hot Pink | Pink |
 | **17** | `(255, 0, 85)` | Crimson / Pink-Red | Pink-Red |
 
+### B. Caption Filtering Rules
 
-### B. Additional Generations
+   **Pose Words**
+
+   ```python
+    POSE_WORDS = [
+    "stand", "standing", "sit", "sitting", "seated", "seat", "kneel", "kneeling",
+    "lying", "laying", "lay", "walk", "walking", "run", "running", "jump", "jumping",
+    "crouch", "crouching", "bend", "bending", "bent", "lean", "leaning", "reach",
+    "reaching", "stretch", "stretching", "pose", "posing", "gesture", "gesturing",
+    "arms crossed", "legs crossed", "looking back", "over her shoulder",
+    "over his shoulder", "turned", "twisted", "squat", "squatting", "hands on hips",
+    "tiptoe", "dancing", "stance", "posture", "curled", "arched", "tilted", "propped",
+    "straddling", "prone", "supine", "upright", "reclining", "hunched", "slouch",
+    "raised arm", "raised arms", "outstretched", "mid-stride", "mid-flight",
+    "extended forward", "riding", "ride", "astride", "mounted", "mounting", "perched",
+]
+```
+
+   **Framing Words**
+```python
+FRAMING_WORDS = [
+    "close-up", "close up", "medium shot", "wide shot", "full shot", "full-length shot",
+    "medium close-up", "extreme close-up", "headshot", "head shot", "portrait shot",
+    "portrait-style", "cowboy shot", "waist up", "waist-up", "knees up", "knees-up",
+    "chest up", "shoulders up", "from the waist", "entire figure", "entire statue",
+    "full body shot", "full-body shot", "full-length",
+]
+```
+
+### C. Additional Generations
 
 The following figures illustrate how the same pose condition can produce different visual styles while preserving the underlying body geometry.
 
 ![Gothic duo pose conditioning and generated images](/images/blog/krea2/gothic.png)
 
-*Figure B1 — Gothic duo: pose conditioning and generated images across different visual styles.*
+*Figure C1 — Gothic duo: pose conditioning and generated images across different visual styles.*
 
 ![Mage and jester pose conditioning comparisons](/images/blog/krea2/mage_jester.png)
 
-*Figure B2 — Mage and jester: pose conditioning and corresponding generations.*
+*Figure C2 — Mage and jester: pose conditioning and corresponding generations.*
 
 
 The following collage presents additional generations across a variety of prompts, artistic styles, and visual compositions.
 
 ![Additional Pose Control LoRA generations](/images/blog/krea2/Appendix.png)
 
-*Figure B3 — Additional generations showcasing the model's diversity across artistic styles and prompts.*
+*Figure C3 — Additional generations showcasing the model's diversity across artistic styles and prompts.*
 

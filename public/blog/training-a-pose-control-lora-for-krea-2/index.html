@@ -6,13 +6,37 @@
 
 
 <link rel="canonical" href="http://localhost:1313/blog/training-a-pose-control-lora-for-krea-2/">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#191919">
+<script>
+  (function () {
+    var key = 'AdhitThemePreference';
+    var preference = null;
+    try {
+      var saved = window.localStorage.getItem(key);
+      if (saved === 'light' || saved === 'dark') preference = saved;
+    } catch (error) {
+      
+    }
+
+    var systemDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    var scheme = preference || (systemDark ? 'dark' : 'light');
+    var root = document.documentElement;
+    root.dataset.scheme = scheme;
+    root.dataset.themePreference = scheme;
+    root.style.colorScheme = scheme;
+
+    var themeColor = document.querySelector('meta[name="theme-color"]');
+    if (themeColor) themeColor.setAttribute('content', scheme === 'dark' ? '#191919' : '#F8F7FA');
+  })();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap">
 
 
-<link rel="stylesheet" href="/scss/style.min.499942f699c939302bb11f2aaedb5f10119983f3a5e219ab20ce4e5f5bfefa07.css"><meta property='og:title' content="Training a Pose Control LoRA for Krea-2">
+<link rel="stylesheet" href="/scss/style.min.0be4215d604c2bfd9995e690e915730723cc48274e63a0f114c1f55f4d442ef4.css"><meta property='og:title' content="Training a Pose Control LoRA for Krea-2">
 <meta property='og:description' content="Building a pose-conditioned ControlNet for Krea-2, from dataset preparation and pose extraction to model training and evaluation.">
 <meta property='og:url' content='http://localhost:1313/blog/training-a-pose-control-lora-for-krea-2/'>
 <meta property='og:site_name' content='Adhit'>
@@ -24,7 +48,9 @@
     <script>
         (function() {
             const colorSchemeKey = 'StackColorScheme';
-            localStorage.setItem(colorSchemeKey, "dark");
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
         })();
     </script><script>
     (function() {
@@ -43,13 +69,10 @@
 </script>
 <div class="container main-container flex on-phone--column compact"><aside class="sidebar left-sidebar sticky ">
     <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu" aria-controls="main-menu" aria-expanded="false">
-        <span class="hamburger-box">
-            <span class="hamburger-inner"></span>
-        </span>
+        <span class="hamburger-box"><span class="hamburger-inner"></span></span>
     </button>
 
     <header>
-        
         
         <div class="site-meta">
             <h1 class="site-name"><a href="/">Adhit</a></h1>
@@ -61,7 +84,6 @@
         
         <li >
             <a href='/research/' >
-                
                 <span>Research</span>
             </a>
         </li>
@@ -69,7 +91,6 @@
         
         <li >
             <a href='/notes/' >
-                
                 <span>Notes</span>
             </a>
         </li>
@@ -77,7 +98,6 @@
         
         <li >
             <a href='/blog/' >
-                
                 <span>Blog</span>
             </a>
         </li>
@@ -85,47 +105,38 @@
         
         <li >
             <a href='/photos/' >
-                
                 <span>Photos</span>
             </a>
         </li>
         
         <li class="menu-bottom-section">
             <ol class="menu">
-
-                
             </ol>
         </li>
     </ol>
+
     <div class="sidebar-socials">
-
-  <a href="https://linkedin.com/in/adhitsimhadri" target="_blank" title="LinkedIn">
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-linkedin" viewBox="0 0 16 16">
+        <div class="sidebar-social-links">
+            <a href="https://linkedin.com/in/adhitsimhadri" target="_blank" rel="me noopener noreferrer" title="LinkedIn"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-linkedin" viewBox="0 0 16 16">
   <path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854zm4.943 12.248V6.169H2.542v7.225zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248S2.4 3.226 2.4 3.934c0 .694.521 1.248 1.327 1.248zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016l.016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225z"/>
-</svg>
-  </a>
-
-  <a href="https://x.com/5_4dh1t" target="_blank" title="X">
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-twitter-x" viewBox="0 0 16 16">
+</svg></a>
+            <a href="https://x.com/5_4dh1t" target="_blank" rel="me noopener noreferrer" title="X"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-twitter-x" viewBox="0 0 16 16">
   <path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865z"/>
-</svg>
-  </a>
-
-   <a href="https://github.com/s-adhit" target="_blank" title="github">
-    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+</svg></a>
+            <a href="https://github.com/s-adhit" target="_blank" rel="me noopener noreferrer" title="GitHub"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
   <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
 </svg>
 
 
-
-  </a>
-
-</div>
+</a>
+            <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark mode" title="Switch to dark mode">
+                <svg class="theme-toggle__moon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8Z" /></svg>
+                <svg class="theme-toggle__sun" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" /></svg>
+            </button>
+        </div>
+    </div>
 </aside>
-
-
-
 
             <main class="main full-width"><article class="blog-article">
   <header class="blog-article-header">
@@ -207,7 +218,8 @@
     <li><a href="#appendix">Appendix</a>
       <ul>
         <li><a href="#a-keypoints-and-color-mapping">A. Keypoints and Color Mapping</a></li>
-        <li><a href="#b-additional-generations">B. Additional Generations</a></li>
+        <li><a href="#b-caption-filtering-rules">B. Caption Filtering Rules</a></li>
+        <li><a href="#c-additional-generations">C. Additional Generations</a></li>
       </ul>
     </li>
   </ul>
@@ -275,7 +287,8 @@
     <li><a href="#appendix">Appendix</a>
       <ul>
         <li><a href="#a-keypoints-and-color-mapping">A. Keypoints and Color Mapping</a></li>
-        <li><a href="#b-additional-generations">B. Additional Generations</a></li>
+        <li><a href="#b-caption-filtering-rules">B. Caption Filtering Rules</a></li>
+        <li><a href="#c-additional-generations">C. Additional Generations</a></li>
       </ul>
     </li>
   </ul>
@@ -286,126 +299,89 @@
   <section class="blog-article-content"><h2 id="tldr">TL;DR
 </h2><p>In this blog, I explain the decisions and ideas that led me to train a Pose Control LoRA for Krea-2. The core architecture is a LoRA-based adaptation of Krea-2 with a modified input layer that accepts both the pose condition and the image latent. The final model release is the result of checkpoint interpolation between training steps 4000 and 4300.</p>
 <p><img alt="Final model showcase" loading="lazy" sizes="(max-width: 767px) calc(100vw - 30px), (max-width: 1023px) 700px, (max-width: 1279px) 950px, 1232px" src="/images/blog/krea2/hero.png">
+
+<img alt="Final model showcase" loading="lazy" sizes="(max-width: 767px) calc(100vw - 30px), (max-width: 1023px) 700px, (max-width: 1279px) 950px, 1232px" src="/images/blog/krea2/hero_condition.png">
 </p>
 <p><em>Figure 1 — Hero collage.</em></p>
 <hr>
 <h2 id="1-introduction">1. Introduction
-</h2><p>Krea-2 is an open-weights image generation model designed with an emphasis on visual aesthetics and controllability through text prompts and image inputs<sup class="citation"><a class="citation__link" href="#ref-krea2" aria-label="Citation 1: Lee, S., et al. (2026). Krea 2 Technical Report. Krea. Technical Report" data-citation-preview="Lee, S., et al. (2026). Krea 2 Technical Report. Krea. Technical Report">[1]</a></sup>
-. I highly recommend reading the <a class="link" href="https://www.krea.ai/blog/krea-2-technical-report"  target="_blank" rel="noopener"
-    >Krea-2 Technical Report</a> for a deeper understanding of the model&rsquo;s foundations, architectural lineage, and training methodology. At its core, Krea-2 builds on a multimodal flow-matching architecture, refined through an extensive training process to achieve high-quality image generation and flexible control over its outputs.</p>
-<p>Text-only generation does not provide deterministic control over body layout, and pose is a useful conditioning signal because it helps separate geometry from appearance. The goal of this project is to use pose to control the broad body layout, while using text to control identity, clothing, environment, and visual style.</p>
+</h2><p>Krea-2 is a 12B MMDiT-based open-weights image generation model focused on aesthetics and controllability through text and image inputs<sup class="citation"><a class="citation__link" href="#ref-krea2" aria-label="Citation 1: Lee, S., et al. (2026). Krea 2 Technical Report. Krea. Technical Report" data-citation-preview="Lee, S., et al. (2026). Krea 2 Technical Report. Krea. Technical Report">[1]</a></sup>
+. I recommend reading the Krea-2 Technical Report if you want a deeper understanding of the model and how it was trained.</p>
+<p>Text-only generation does not give deterministic control over body layout, and pose is a useful conditioning signal because it helps separate geometry from appearance. The goal of this project is to use pose to control the broad body layout, while text controls identity, clothing, environment, and visual style.</p>
 <p>This project builds on Tanmay Patil&rsquo;s Krea-2 Depth ControlNet implementation<sup class="citation"><a class="citation__link" href="#ref-krea2-depth-controlnet-lora" aria-label="Citation 2: Patil, T. Krea-2 Depth ControlNet-LoRA. GitHub Repository" data-citation-preview="Patil, T. Krea-2 Depth ControlNet-LoRA. GitHub Repository">[2]</a></sup>
-, adapting the conditioning approach to human pose. I adapted that approach to human-pose conditioning and developed the pose dataset and preprocessing pipeline, training objective, finishing strategy, evaluation setup, and inference path discussed below.</p>
+. I adapted that conditioning approach to human pose and built the dataset, preprocessing pipeline, training setup, evaluation pipeline, and inference path discussed below.</p>
 <p>This is a fairly long blog, so in short, the following sections cover data preparation, architecture, the training objective, evaluations, results, and discussion.</p>
 <hr>
 <h2 id="2-data-preparation">2. Data Preparation
-</h2><p>In this section, we will discuss data collection, pose generation (conditioning images), data review/cleanup, and captioning.  I spent about 3 weeks on this section and compiled a dataset of 17k images, poses, and captions, totaling about 10 GB.</p>
+</h2><p>Data preparation ended up being one of the most time-consuming parts of the project. I spent around three weeks collecting, cleaning, captioning, and reviewing the data. Around 36k candidate images were collected initially, which were reduced to 17,495 image–pose–caption samples after pose generation and manual review.</p>
+<figure class="theme-image"><img class="theme-image__image theme-image__image--light" src="/images/blog/krea2/Data_2.png" alt="Data preparation pipeline" loading="eager">
+    <img class="theme-image__image theme-image__image--dark" src="/images/blog/krea2/Data.png" alt="Data preparation pipeline" loading="eager"></figure>
+
+<p><em>Figure 2 — Data Preparation Pipeline.</em></p>
 <h3 id="21-dataset-collection">2.1 Dataset Collection
-</h3><p>Initially, I collected around 36k images, but after final cleanup and review, I reduced it to 17,495 images. I compiled the dataset from COCO<sup class="citation"><a class="citation__link" href="#ref-coco" aria-label="Citation 5: Lin, T.-Y., et al. (2014). Microsoft COCO: Common Objects in Context. ECCV. Paper" data-citation-preview="Lin, T.-Y., et al. (2014). Microsoft COCO: Common Objects in Context. ECCV. Paper">[5]</a></sup>
+</h3><p>I collected data from COCO<sup class="citation"><a class="citation__link" href="#ref-coco" aria-label="Citation 5: Lin, T.-Y., et al. (2014). Microsoft COCO: Common Objects in Context. ECCV. Paper" data-citation-preview="Lin, T.-Y., et al. (2014). Microsoft COCO: Common Objects in Context. ECCV. Paper">[5]</a></sup>
 , Danbooru<sup class="citation"><a class="citation__link" href="#ref-danbooru" aria-label="Citation 7: Anonymous, Danbooru Community, &amp; Branwen, G. (2022). Danbooru2021: A Large-Scale Crowdsourced &amp; Tagged Anime Illustration Dataset. Dataset" data-citation-preview="Anonymous, Danbooru Community, &amp; Branwen, G. (2022). Danbooru2021: A Large-Scale Crowdsourced &amp; Tagged Anime Illustration Dataset. Dataset">[7]</a></sup>
 , and Human-Art<sup class="citation"><a class="citation__link" href="#ref-humanart" aria-label="Citation 6: Ju, X., Zeng, A., Wang, J., Xu, Q., &amp; Zhang, L. (2023). Human-Art: A Versatile Human-Centric Dataset Bridging Natural and Artificial Scenes. CVPR. Paper" data-citation-preview="Ju, X., Zeng, A., Wang, J., Xu, Q., &amp; Zhang, L. (2023). Human-Art: A Versatile Human-Centric Dataset Bridging Natural and Artificial Scenes. CVPR. Paper">[6]</a></sup>
-. After pose generation, I manually reviewed the condition and source images and dropped those that did not meet accuracy and quality standards, resulting in 17,495 images. I cannot share the full dataset because of mixed licenses, but I have made a portion public on Hugging Face (<a class="link" href="https://huggingface.co/datasets/adhit-420/PoseBridge"  target="_blank" rel="noopener"
-    >PoseBridge</a>), and the data preprocessing is available on my GitHub (<a class="link" href="https://github.com/s-adhit/PoseBridge"  target="_blank" rel="noopener"
-    >PoseBridge Pre-processing</a>). My main priority was data diversity. I sourced human images from COCO (person category), anime images from Danbooru, and sculptures and paintings (digital art, stained glass, oil paintings, cartoons, and Ukiyo-e) from Human-art. For pose diversity among real humans, I sourced additional real human data from the Human-art dataset in the Dances and Acrobatics category. </p>
-<details class="collapsible-table blog-table"><summary><span class="collapsible-table__title">Table 1 — Dataset Split and Source Distribution</span><span class="collapsible-table__hint" aria-hidden="true"><span class="collapsible-table__expand-label">Expand</span><span class="collapsible-table__collapse-label">Collapse</span></span></summary><div class="collapsible-table__content"><table class="blog-table__table">
+. The main goal was diversity in both pose and visual style.</p>
+<p>COCO contributed photoreal images, Danbooru added anime images, and Human-Art provided paintings, sculptures, dance, and acrobatic poses. After pose generation, I manually reviewed the source image together with its corresponding pose condition and removed inaccurate or low-quality samples.</p>
+<p>The final dataset contains 17,495 samples. Because of mixed licenses, I cannot share the complete dataset, but a portion is available on Hugging Face as <a class="link" href="https://huggingface.co/datasets/adhit-420/PoseBridge"  target="_blank" rel="noopener"
+    >PoseBridge</a>, and the preprocessing pipeline is available on GitHub at <a class="link" href="https://github.com/s-adhit/PoseBridge"  target="_blank" rel="noopener"
+    >PoseBridge Pre-processing</a>. </p>
+<details class="collapsible-table blog-table"><summary><span class="collapsible-table__title">Table 1 — Dataset Source Distribution</span><span class="collapsible-table__hint" aria-hidden="true"><span class="collapsible-table__expand-label">Expand</span><span class="collapsible-table__collapse-label">Collapse</span></span></summary><div class="collapsible-table__content"><table class="blog-table__table">
   <thead>
       <tr>
-          <th>Split / source</th>
-          <th>Images</th>
-          <th>Share</th>
-          <th>Notes</th>
+          <th>Source</th>
+          <th style="text-align: right">Images</th>
+          <th style="text-align: right">Share</th>
       </tr>
   </thead>
   <tbody>
       <tr>
-          <td>Training</td>
-          <td>16582</td>
-          <td>~94.78%</td>
-          <td>The Trainset</td>
+          <td>COCO</td>
+          <td style="text-align: right">3,893</td>
+          <td style="text-align: right">~22.25%</td>
       </tr>
       <tr>
-          <td>Validation</td>
-          <td>865</td>
-          <td>~5.08%</td>
-          <td>I initially used it for validation testing, but in later training, I removed the validation loss calculation; therefore, none of the poses here were seen during training, and I sampled them using stratified sampling. Later for final evals I picked some poses from here</td>
+          <td>Danbooru</td>
+          <td style="text-align: right">2,255</td>
+          <td style="text-align: right">~12.89%</td>
       </tr>
       <tr>
-          <td>Diagnostic Testing</td>
-          <td>48</td>
-          <td>~0.13%</td>
-          <td>I picked these images to test pose generalization between training checkpoints. I used these poses for evaluation.</td>
-      </tr>
-      <tr>
-          <td>COCO  (Photoreal)</td>
-          <td>3893</td>
-          <td>~22.25%</td>
-          <td>COCO PhotoReal included a wide range of images with varying quality, sampled by person category in COCO.</td>
-      </tr>
-      <tr>
-          <td>Danbooru (anime)</td>
-          <td>2255</td>
-          <td>~12.89%</td>
-          <td>Danbooru has a variety of anime poses in different aspect ratios, sampled while excluding explicit content tags.</td>
-      </tr>
-      <tr>
-          <td>Human-Art real-human</td>
-          <td>3257</td>
-          <td>~18.61%</td>
-          <td>Acrobatic and Dance poses are mainly used to teach the model difficult poses.</td>
+          <td>Human-Art Real Human</td>
+          <td style="text-align: right">3,257</td>
+          <td style="text-align: right">~18.61%</td>
       </tr>
       <tr>
           <td>Human-Art Painting</td>
-          <td>6502</td>
-          <td>~37.16%</td>
-          <td>Various paintings/digital art sets to add style diversity to the training set.</td>
+          <td style="text-align: right">6,502</td>
+          <td style="text-align: right">~37.16%</td>
       </tr>
       <tr>
           <td>Human-Art Sculpture</td>
-          <td>1588</td>
-          <td>~9.07%</td>
-          <td>The sculptures featured a variety of poses used to teach the model sculpture poses.</td>
+          <td style="text-align: right">1,588</td>
+          <td style="text-align: right">~9.07%</td>
       </tr>
   </tbody>
 </table></div></details>
 <p><img alt="Dataset montage" loading="lazy" sizes="(max-width: 767px) calc(100vw - 30px), (max-width: 1023px) 700px, (max-width: 1279px) 950px, 1232px" src="/images/blog/krea2/dataset-montage.png">
 </p>
-<p><em>Figure 2 — Dataset montage.</em></p>
+<p><em>Figure 3 — Dataset montage.</em></p>
 <h3 id="22-pose-representation">2.2 Pose Representation
-</h3><p>Before choosing a keypoint structure for the pose skeleton, I experimented with different keypoint configurations (e.g., 21 keypoints + hands, face + hand representation). To keep it simple, I used COCO’s 17-keypoint format for the entire dataset, which was used in both the ControlNet <sup class="citation"><a class="citation__link" href="#ref-controlnet" aria-label="Citation 3: Zhang, L., Rao, A., &amp; Agrawala, M. (2023). Adding Conditional Control to Text-to-Image Diffusion Models. ICCV. Paper" data-citation-preview="Zhang, L., Rao, A., &amp; Agrawala, M. (2023). Adding Conditional Control to Text-to-Image Diffusion Models. ICCV. Paper">[3]</a></sup>
- and OpenPose <sup class="citation"><a class="citation__link" href="#ref-openpose" aria-label="Citation 4: Cao, Z., Simon, T., Wei, S.-E., &amp; Sheikh, Y. (2017). Realtime Multi-Person 2D Pose Estimation Using Part Affinity Fields. CVPR. Paper" data-citation-preview="Cao, Z., Simon, T., Wei, S.-E., &amp; Sheikh, Y. (2017). Realtime Multi-Person 2D Pose Estimation Using Part Affinity Fields. CVPR. Paper">[4]</a></sup>
- papers for pose estimation. I used the existing COCO and Human-Art annotations to map them to the 17 points. For the Danbooru set, I sampled over 10,000 images, applied a DWpose <sup class="citation"><a class="citation__link" href="#ref-dwpose" aria-label="Citation 8: Yang, Z., Zeng, A., Yuan, C., &amp; Li, Y. (2023). Effective Whole-Body Pose Estimation with Two-Stages Distillation. ICCV Workshops. Paper" data-citation-preview="Yang, Z., Zeng, A., Yuan, C., &amp; Li, Y. (2023). Effective Whole-Body Pose Estimation with Two-Stages Distillation. ICCV Workshops. Paper">[8]</a></sup>
- detector to all of them, manually reviewed pose and image quality, and removed low-quality samples. The appendix table shows the keypoints and their corresponding colors. See <a class="link" href="#a-keypoints-and-color-mapping" >Appendix A: Keypoints and Color Mapping</a>.</p>
+</h3><p>I experimented with richer pose representations, including hands and facial keypoints, but eventually standardized the dataset to the COCO 17-keypoint format.</p>
+<p>Existing annotations from COCO and Human-Art were mapped to this representation. For Danbooru images, DWPose<sup class="citation"><a class="citation__link" href="#ref-dwpose" aria-label="Citation 8: Yang, Z., Zeng, A., Yuan, C., &amp; Li, Y. (2023). Effective Whole-Body Pose Estimation with Two-Stages Distillation. ICCV Workshops. Paper" data-citation-preview="Yang, Z., Zeng, A., Yuan, C., &amp; Li, Y. (2023). Effective Whole-Body Pose Estimation with Two-Stages Distillation. ICCV Workshops. Paper">[8]</a></sup>
+ was used to estimate the keypoints, followed by manual review of the generated pose conditions.</p>
+<p>The final representation focuses on broad body structure rather than detailed hands, fingers, or facial expressions. The full keypoint and color mapping is available in <a class="link" href="#a-keypoints-and-color-mapping" >Appendix A: Keypoints and Color Mapping</a>.</p>
 <p><img alt="RGB to pose condition" loading="lazy" sizes="(max-width: 767px) calc(100vw - 30px), (max-width: 1023px) 700px, (max-width: 1279px) 950px, 1232px" src="/images/blog/krea2/dataset_condition_montage.png">
 </p>
-<p><em>Figure 3 — Pose montage</em></p>
+<p><em>Figure 4 — Pose montage</em></p>
 <h3 id="23-captioning">2.3 Captioning
-</h3><p>For captioning, I initially tested BLIP<sup class="citation"><a class="citation__link" href="#ref-blip" aria-label="Citation 9: Li, J., Li, D., Xiong, C., &amp; Hoi, S. (2022). BLIP: Bootstrapping Language-Image Pre-training for Unified Vision-Language Understanding and Generation. Paper" data-citation-preview="Li, J., Li, D., Xiong, C., &amp; Hoi, S. (2022). BLIP: Bootstrapping Language-Image Pre-training for Unified Vision-Language Understanding and Generation. Paper">[9]</a></sup>
-, which was originally used for captions on the Human-Art dataset, but it didn&rsquo;t meet the quality I was looking for. The other model I tested was <code>Qwen3-VL 3B</code><sup class="citation"><a class="citation__link" href="#ref-qwen3vl" aria-label="Citation 10: Bai, S., et al. (2025). Qwen3-VL Technical Report. Paper" data-citation-preview="Bai, S., et al. (2025). Qwen3-VL Technical Report. Paper">[10]</a></sup>
-, which is close to the Krea-2 encoder, but ultimately the best-quality results I got were from Gemini <code>gemini-3.5-flash-lite</code><sup class="citation"><a class="citation__link" href="#ref-gemini" aria-label="Citation 11: Google DeepMind (2026). Gemini 3.5 Flash-Lite Model Card. Model Card" data-citation-preview="Google DeepMind (2026). Gemini 3.5 Flash-Lite Model Card. Model Card">[11]</a></sup>
- (Total cost for captioning with the Gemini API was about 10 USD).</p>
-<p>The main goal of captioning was for the captions to describe only the style and what&rsquo;s in the image, but they would describe the posing and framing of the subjects in the image. The prompt shouldn&rsquo;t influence the pose in the image. The pose should come only from the conditioning image.</p>
-<p><strong>Excluded Pose and Framing Words</strong></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>POSE_WORDS <span style="color:#f92672">=</span> [
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;stand&#34;</span>, <span style="color:#e6db74">&#34;standing&#34;</span>, <span style="color:#e6db74">&#34;sit&#34;</span>, <span style="color:#e6db74">&#34;sitting&#34;</span>, <span style="color:#e6db74">&#34;seated&#34;</span>, <span style="color:#e6db74">&#34;seat&#34;</span>, <span style="color:#e6db74">&#34;kneel&#34;</span>, <span style="color:#e6db74">&#34;kneeling&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;lying&#34;</span>, <span style="color:#e6db74">&#34;laying&#34;</span>, <span style="color:#e6db74">&#34;lay&#34;</span>, <span style="color:#e6db74">&#34;walk&#34;</span>, <span style="color:#e6db74">&#34;walking&#34;</span>, <span style="color:#e6db74">&#34;run&#34;</span>, <span style="color:#e6db74">&#34;running&#34;</span>, <span style="color:#e6db74">&#34;jump&#34;</span>, <span style="color:#e6db74">&#34;jumping&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;crouch&#34;</span>, <span style="color:#e6db74">&#34;crouching&#34;</span>, <span style="color:#e6db74">&#34;bend&#34;</span>, <span style="color:#e6db74">&#34;bending&#34;</span>, <span style="color:#e6db74">&#34;bent&#34;</span>, <span style="color:#e6db74">&#34;lean&#34;</span>, <span style="color:#e6db74">&#34;leaning&#34;</span>, <span style="color:#e6db74">&#34;reach&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;reaching&#34;</span>, <span style="color:#e6db74">&#34;stretch&#34;</span>, <span style="color:#e6db74">&#34;stretching&#34;</span>, <span style="color:#e6db74">&#34;pose&#34;</span>, <span style="color:#e6db74">&#34;posing&#34;</span>, <span style="color:#e6db74">&#34;gesture&#34;</span>, <span style="color:#e6db74">&#34;gesturing&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;arms crossed&#34;</span>, <span style="color:#e6db74">&#34;legs crossed&#34;</span>, <span style="color:#e6db74">&#34;looking back&#34;</span>, <span style="color:#e6db74">&#34;over her shoulder&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;over his shoulder&#34;</span>, <span style="color:#e6db74">&#34;turned&#34;</span>, <span style="color:#e6db74">&#34;twisted&#34;</span>, <span style="color:#e6db74">&#34;squat&#34;</span>, <span style="color:#e6db74">&#34;squatting&#34;</span>, <span style="color:#e6db74">&#34;hands on hips&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;tiptoe&#34;</span>, <span style="color:#e6db74">&#34;dancing&#34;</span>, <span style="color:#e6db74">&#34;stance&#34;</span>, <span style="color:#e6db74">&#34;posture&#34;</span>, <span style="color:#e6db74">&#34;curled&#34;</span>, <span style="color:#e6db74">&#34;arched&#34;</span>, <span style="color:#e6db74">&#34;tilted&#34;</span>, <span style="color:#e6db74">&#34;propped&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;straddling&#34;</span>, <span style="color:#e6db74">&#34;prone&#34;</span>, <span style="color:#e6db74">&#34;supine&#34;</span>, <span style="color:#e6db74">&#34;upright&#34;</span>, <span style="color:#e6db74">&#34;reclining&#34;</span>, <span style="color:#e6db74">&#34;hunched&#34;</span>, <span style="color:#e6db74">&#34;slouch&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;raised arm&#34;</span>, <span style="color:#e6db74">&#34;raised arms&#34;</span>, <span style="color:#e6db74">&#34;outstretched&#34;</span>, <span style="color:#e6db74">&#34;mid-stride&#34;</span>, <span style="color:#e6db74">&#34;mid-flight&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;extended forward&#34;</span>, <span style="color:#e6db74">&#34;riding&#34;</span>, <span style="color:#e6db74">&#34;ride&#34;</span>, <span style="color:#e6db74">&#34;astride&#34;</span>, <span style="color:#e6db74">&#34;mounted&#34;</span>, <span style="color:#e6db74">&#34;mounting&#34;</span>, <span style="color:#e6db74">&#34;perched&#34;</span>,
-</span></span><span style="display:flex;"><span>]
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>FRAMING_WORDS <span style="color:#f92672">=</span> [
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;close-up&#34;</span>, <span style="color:#e6db74">&#34;close up&#34;</span>, <span style="color:#e6db74">&#34;medium shot&#34;</span>, <span style="color:#e6db74">&#34;wide shot&#34;</span>, <span style="color:#e6db74">&#34;full shot&#34;</span>, <span style="color:#e6db74">&#34;full-length shot&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;medium close-up&#34;</span>, <span style="color:#e6db74">&#34;extreme close-up&#34;</span>, <span style="color:#e6db74">&#34;headshot&#34;</span>, <span style="color:#e6db74">&#34;head shot&#34;</span>, <span style="color:#e6db74">&#34;portrait shot&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;portrait-style&#34;</span>, <span style="color:#e6db74">&#34;cowboy shot&#34;</span>, <span style="color:#e6db74">&#34;waist up&#34;</span>, <span style="color:#e6db74">&#34;waist-up&#34;</span>, <span style="color:#e6db74">&#34;knees up&#34;</span>, <span style="color:#e6db74">&#34;knees-up&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;chest up&#34;</span>, <span style="color:#e6db74">&#34;shoulders up&#34;</span>, <span style="color:#e6db74">&#34;from the waist&#34;</span>, <span style="color:#e6db74">&#34;entire figure&#34;</span>, <span style="color:#e6db74">&#34;entire statue&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;full body shot&#34;</span>, <span style="color:#e6db74">&#34;full-body shot&#34;</span>, <span style="color:#e6db74">&#34;full-length&#34;</span>,
-</span></span><span style="display:flex;"><span>]
-</span></span></code></pre></div><p><strong>Example Caption</strong></p>
+</h3><p>I initially tested BLIP<sup class="citation"><a class="citation__link" href="#ref-blip" aria-label="Citation 9: Li, J., Li, D., Xiong, C., &amp; Hoi, S. (2022). BLIP: Bootstrapping Language-Image Pre-training for Unified Vision-Language Understanding and Generation. Paper" data-citation-preview="Li, J., Li, D., Xiong, C., &amp; Hoi, S. (2022). BLIP: Bootstrapping Language-Image Pre-training for Unified Vision-Language Understanding and Generation. Paper">[9]</a></sup>
+ and <code>Qwen3-VL 3B</code><sup class="citation"><a class="citation__link" href="#ref-qwen3vl" aria-label="Citation 10: Bai, S., et al. (2025). Qwen3-VL Technical Report. Paper" data-citation-preview="Bai, S., et al. (2025). Qwen3-VL Technical Report. Paper">[10]</a></sup>
+ for captioning, but the best results came from Gemini <code>gemini-3.5-flash-lite</code><sup class="citation"><a class="citation__link" href="#ref-gemini" aria-label="Citation 11: Google DeepMind (2026). Gemini 3.5 Flash-Lite Model Card. Model Card" data-citation-preview="Google DeepMind (2026). Gemini 3.5 Flash-Lite Model Card. Model Card">[11]</a></sup>
+. The total captioning cost was roughly $10.</p>
+<p>The main goal was for captions to describe appearance, clothing, environment, and style without describing the subject&rsquo;s pose or framing. The pose should come from the conditioning image rather than the text.</p>
+<p>Pose-related and framing-related words were filtered from the generated captions. The complete filtering lists are included in the <a class="link" href="#appendix-b--caption-filtering-rules" >Appendix B: Caption Filtering Rules</a>.</p>
+<p><strong>Example Caption</strong></p>
 
     <blockquote>
         <p>A photograph depicts a man with glasses wearing a dark green polo shirt and light-colored shorts next to a white and blue airplane on a concrete tarmac under a blue sky with white clouds, with green trees and a lamppost in the background, illuminated by bright daylight captured with a wide-angle lens, film grain</p>
@@ -413,61 +389,57 @@
     </blockquote>
 <p><img alt="Image taken from COCO dataset" loading="lazy" sizes="(max-width: 767px) calc(100vw - 30px), (max-width: 1023px) 700px, (max-width: 1279px) 950px, 1232px" src="/images/blog/krea2/image.png">
 </p>
-<p><em>Figure 4 — Example image and generated caption.</em></p>
+<p><em>Figure 5 — Example image and generated caption.</em></p>
 <h3 id="24-aspect-ratio-buckets-and-geometry">2.4 Aspect-Ratio Buckets and Geometry
-</h3><p>Following a bucketed aspect-ratio training approach similar to Tanmay’s krea2 Depth controlnet lora <sup class="citation"><a class="citation__link" href="#ref-krea2-depth-controlnet-lora" aria-label="Citation 2: Patil, T. Krea-2 Depth ControlNet-LoRA. GitHub Repository" data-citation-preview="Patil, T. Krea-2 Depth ControlNet-LoRA. GitHub Repository">[2]</a></sup>
-. I mapped images to their nearest resolution bucket and grouped them into uniform batches to preserve native geometry. To optimize compute throughput and drastically reduce training time for the portrait-heavy dataset, I trained at a 768px base resolution rather than 1 MP. This trade-off delivers high training speed with negligible crop loss. Bucket aspect-ratio training maps images to the closest buckets and shards them together. I handled extreme portrait and landscape instances with threshold detection, boundary bucket mapping, and paired center-cropping. At inference, the model generalizes to native image generation without distortion.</p>
-<details class="collapsible-table blog-table"><summary><span class="collapsible-table__title">Table 2 — Dataset Aspect-Ratio Distribution</span><span class="collapsible-table__hint" aria-hidden="true"><span class="collapsible-table__expand-label">Expand</span><span class="collapsible-table__collapse-label">Collapse</span></span></summary><div class="collapsible-table__content"><table class="blog-table__table">
+</h3><p>Instead of forcing every image into a square resolution, I used aspect-ratio buckets similar to the approach used in Tanmay Patil&rsquo;s Krea-2 Depth ControlNet LoRA<sup class="citation"><a class="citation__link" href="#ref-krea2-depth-controlnet-lora" aria-label="Citation 2: Patil, T. Krea-2 Depth ControlNet-LoRA. GitHub Repository" data-citation-preview="Patil, T. Krea-2 Depth ControlNet-LoRA. GitHub Repository">[2]</a></sup>
+.</p>
+<p>Images were assigned to the nearest 768px-resolution bucket so that training could preserve more of the original image geometry.
+<strong>Table 2 — Dataset Aspect-Ratio Distribution</strong></p>
+<details class="collapsible-table blog-table"><summary><span class="collapsible-table__title">View table</span><span class="collapsible-table__hint" aria-hidden="true"><span class="collapsible-table__expand-label">Expand</span><span class="collapsible-table__collapse-label">Collapse</span></span></summary><div class="collapsible-table__content"><table>
   <thead>
       <tr>
-          <th><strong>Category</strong></th>
-          <th><strong>Aspect Ratio Range</strong></th>
-          <th><strong>Image Count</strong></th>
-          <th><strong>Dataset Share</strong></th>
+          <th>Category</th>
+          <th>Aspect Ratio Range</th>
+          <th style="text-align: right">Images</th>
+          <th style="text-align: right">Share</th>
       </tr>
   </thead>
   <tbody>
       <tr>
-          <td><strong>Portrait</strong></td>
-          <td>$AR < 0.98$</td>
-          <td>9,855</td>
-          <td>56.33%</td>
-      </tr>
-      <tr>
-          <td><strong>Landscape</strong></td>
-          <td>$AR > 1.02$</td>
-          <td>6,879</td>
-          <td>39.32%</td>
-      </tr>
-      <tr>
-          <td><strong>Square</strong></td>
+          <td>Square</td>
           <td>$0.98 \le AR \le 1.02$</td>
-          <td>761</td>
-          <td>4.35%</td>
+          <td style="text-align: right">761</td>
+          <td style="text-align: right">4.35%</td>
       </tr>
       <tr>
-          <td><strong>Extreme Portrait</strong> <em>(Subset)</em></td>
+          <td>Portrait</td>
+          <td>$0.50 < AR < 0.98$</td>
+          <td style="text-align: right">8,854</td>
+          <td style="text-align: right">50.61%</td>
+      </tr>
+      <tr>
+          <td>Landscape</td>
+          <td>$1.02 < AR < 2.00$</td>
+          <td style="text-align: right">6,733</td>
+          <td style="text-align: right">38.49%</td>
+      </tr>
+      <tr>
+          <td>Extreme Portrait</td>
           <td>$AR \le 0.50$</td>
-          <td>978</td>
-          <td>5.59%</td>
+          <td style="text-align: right">1,001</td>
+          <td style="text-align: right">5.72%</td>
       </tr>
       <tr>
-          <td><strong>Extreme Landscape</strong> <em>(Subset)</em></td>
+          <td>Extreme Landscape</td>
           <td>$AR \ge 2.00$</td>
-          <td>113</td>
-          <td>0.65%</td>
+          <td style="text-align: right">146</td>
+          <td style="text-align: right">0.83%</td>
       </tr>
       <tr>
-          <td><strong>Total Dataset</strong></td>
+          <td><strong>Total</strong></td>
           <td><strong>All</strong></td>
-          <td><strong>17,495</strong></td>
-          <td><strong>100.00%</strong></td>
-      </tr>
-      <tr>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
+          <td style="text-align: right"><strong>17,495</strong></td>
+          <td style="text-align: right"><strong>100.00%</strong></td>
       </tr>
   </tbody>
 </table></div></details>
@@ -475,12 +447,21 @@
 <h2 id="3-architecture">3. Architecture
 </h2><p>The architecture was adapted from Tanmay&rsquo;s Depth-Control Lora <sup class="citation"><a class="citation__link" href="#ref-krea2-depth-controlnet-lora" aria-label="Citation 2: Patil, T. Krea-2 Depth ControlNet-LoRA. GitHub Repository" data-citation-preview="Patil, T. Krea-2 Depth ControlNet-LoRA. GitHub Repository">[2]</a></sup>
  which takes any image and a Depth map and adapts it to a new generation while preserving the same 3D structure. I followed the same pattern, but instead we give a pose skeleton, and it steers the image with a prompt towards the Pose. The Krea-2 Backbone is frozen; the only difference from the original Krea-2 is that the Input Layer is modified to take the Pose latent and image latent, rather than only the image latent.</p>
-<p><img alt="Architecture diagram" loading="lazy" sizes="(max-width: 767px) calc(100vw - 30px), (max-width: 1023px) 700px, (max-width: 1279px) 950px, 1232px" src="/images/blog/krea2/architecture.png">
-</p>
-<p><em>Figure 5 — Pose Control LoRA architecture for Krea-2.</em></p>
+<figure class="theme-image"><img class="theme-image__image theme-image__image--light" src="/images/blog/krea2/architecture_2.png" alt="Krea-2 Pose Control LoRA architecture diagram" loading="eager">
+    <img class="theme-image__image theme-image__image--dark" src="/images/blog/krea2/architecture.png" alt="Krea-2 Pose Control LoRA architecture diagram" loading="eager"></figure>
+
+<p><em>Figure 6 — Pose Control LoRA architecture for Krea-2.</em></p>
 <h3 id="31-pose-control-injection">3.1 Pose-Control Injection
-</h3><p>The pose condition and target image are encoded separately into the pose latent and the noisy image latent, respectively. The pose latent is kept clean, while the image is encoded with time-step noise. The input control layer is modified to accept the concatenated pose and noisy image latents along the feature dimension. This doubles the input width seen by the first projection layer (64→128), so the original Krea-2 input projection is replaced by a trainable expanded  <code>ControlInputLayer</code>that maps the concatenated representation back to the model width. From there, the frozen Krea-2 single-stream transformer backbone processes the representation. Adaptation is performed through rank-64 LoRA<sup class="citation"><a class="citation__link" href="#ref-lora" aria-label="Citation 12: Hu, E. J., et al. (2021). LoRA: Low-Rank Adaptation of Large Language Models. Paper" data-citation-preview="Hu, E. J., et al. (2021). LoRA: Low-Rank Adaptation of Large Language Models. Paper">[12]</a></sup>
- modules attached to <code>attn.{wq,wk,wv,gate,wo}</code>and  <code>mlp.{gate,up,down}</code>across all 28 transformer blocks. The backbone weights remain frozen; only the expanded control input projection and the LoRA adapters are trained.</p>
+</h3><p>The pose condition is encoded with the Qwen-Image VAE and kept as a clean control latent.</p>
+<h4 id="training-time">Training time
+</h4><p>During training, the target image is encoded into a latent \(x_0\). Gaussian noise \(\epsilon\) is sampled and mixed with the image latent using the shifted timestep \(t\):</p>
+\[
+x_t = t\epsilon + (1-t)x_0
+\]<p>The clean pose latent is then concatenated with \(x_t\). This doubles the input width from 64 to 128, so the original Krea-2 input projection is replaced with a trainable <code>ControlInputLayer</code>.</p>
+<h4 id="inference-time">Inference time
+</h4><p>At inference, there is no target image. Generation starts directly from Gaussian latent noise. At each denoising step, the current image latent is concatenated with the same clean pose latent before being passed through the expanded input layer.</p>
+<p>The rest of Krea-2 remains frozen, while rank-64 LoRA<sup class="citation"><a class="citation__link" href="#ref-lora" aria-label="Citation 12: Hu, E. J., et al. (2021). LoRA: Low-Rank Adaptation of Large Language Models. Paper" data-citation-preview="Hu, E. J., et al. (2021). LoRA: Low-Rank Adaptation of Large Language Models. Paper">[12]</a></sup>
+ adapters are trained across all 28 transformer blocks. Only the expanded input layer and LoRA adapters are trainable.</p>
 <h3 id="32-trainable-parameters">3.2 Trainable Parameters
 </h3><p>Direct fine-tuning of the full Krea-2 backbone is expensive, so I used parameter-efficient fine-tuning with LoRA. The final trainable state has <strong>215.49 million parameters across 450 tensors</strong>. LoRA adapters use <strong>rank 64,</strong> targeting <code>attn.{wq,wk,wv,gate,wo}</code> and <code>mlp.{gate,up,down} in</code> all <strong>28 transformer blocks</strong>. In addition to LoRA weights, the expanded control-input layer adds <strong>792,576 parameters</strong>. Since Krea-2 has 13 billion parameters, this is about <strong>1.66%</strong> of the full model.</p>
 <details class="collapsible-table blog-table"><summary><span class="collapsible-table__title">Table 3 — Parameter Summary</span><span class="collapsible-table__hint" aria-hidden="true"><span class="collapsible-table__expand-label">Expand</span><span class="collapsible-table__collapse-label">Collapse</span></span></summary><div class="collapsible-table__content"><table class="blog-table__table">
@@ -692,8 +673,11 @@ $$<p>where</p>
   </tbody>
 </table></div></details>
 <h3 id="44-training-stages">4.4 Training Stages
-</h3><p>The total training time was <code>17 hours and 51 minutes</code>. The initial training was performed for 3000 steps, with a 200-step warmup to 1e-4. From step 3000, a cooldown was performed until step 5000. After generating images, visually inspecting them, and comparing all the evaluation metrics every 100 steps, the best pose adherence was achieved at step 4000.</p>
-<p>For the final control, another cooldown from<code>2e-5</code> to <code>5e-6</code> was performed until step 4500. After manually inspecting the checkpoints at 100-step intervals and comparing them visually, the checkpoint at step 4300 performed better in terms of creativity, while the checkpoint at step 4000 had better pose adherence. The final release was a mix of 25% of the step-4300 checkpoint and 75% of the step-4000 parent checkpoint, which performed the best among all the checkpoints.</p>
+</h3><p>The total training time was <code>17 hours and 51 minutes</code>. Training was done on <strong>Krea-2 Raw</strong>, while visual evaluations were performed using <strong>Krea-2 Turbo</strong>, following the setup recommended in the official Krea-2 repository <sup class="citation"><a class="citation__link" href="#ref-krea2" aria-label="Citation 1: Lee, S., et al. (2026). Krea 2 Technical Report. Krea. Technical Report" data-citation-preview="Lee, S., et al. (2026). Krea 2 Technical Report. Krea. Technical Report">[1]</a></sup>
+.</p>
+<p>The initial training ran for 3000 steps, with a 200-step warmup to <code>1e-4</code>. From step 3000, the learning rate was cooled down until step 5000. I generated samples and compared the evaluation metrics every 100 steps, and step 4000 gave the best pose adherence.</p>
+<p>For the final stage, I ran another cooldown from <code>2e-5</code> to <code>5e-6</code> until step 4500. After manually comparing the checkpoints at 100-step intervals, step 4300 looked better in terms of creativity, while step 4000 had better pose adherence.</p>
+<p>The final release is an interpolation of these two checkpoints: <strong>75% step 4000 + 25% step 4300</strong>, which gave the best overall result.</p>
 <details class="collapsible-table blog-table"><summary><span class="collapsible-table__title">Table 6 — Training Stages and Learning-Rate Schedules</span><span class="collapsible-table__hint" aria-hidden="true"><span class="collapsible-table__expand-label">Expand</span><span class="collapsible-table__collapse-label">Collapse</span></span></summary><div class="collapsible-table__content"><table class="blog-table__table">
   <thead>
       <tr>
@@ -897,7 +881,7 @@ $$\operatorname{CLIPSim}(I,T)=\frac{f_I(I)\cdot f_T(T)}{\left\|f_I(I)\right\|_2\
 </h3><p>The below figures are generations across different prompts and conditions of images.</p>
 <p><img alt="Generation examples" loading="lazy" sizes="(max-width: 767px) calc(100vw - 30px), (max-width: 1023px) 700px, (max-width: 1279px) 950px, 1232px" src="/images/blog/krea2/generations.png">
 </p>
-<p><em>Figure 6 — Generations across different prompts and pose conditions.</em></p>
+<p><em>Figure 7 — Generations across different prompts and pose conditions.</em></p>
 <h3 id="63-prompting-behavior">6.3 Prompting Behavior
 </h3><p>The pose conditioning controls the broad body geometry, while the text prompt determines the subject&rsquo;s identity, appearance, clothing, environment, and visual style. The model is highly sensitive to prompting, particularly because it was trained on captions that intentionally excluded pose-related information. This separation encourages the model to follow the conditioning image for body geometry while relying on the text prompt for visual details.</p>
 <p>For recommended prompting strategies and examples, refer to the <a class="link" href="https://github.com/s-adhit/krea2-pose-controlnet/blob/main/prompting.md"  target="_blank" rel="noopener"
@@ -1090,18 +1074,40 @@ $$\operatorname{CLIPSim}(I,T)=\frac{f_I(I)\cdot f_T(T)}{\left\|f_I(I)\right\|_2\
       </tr>
   </tbody>
 </table></div></details>
-<h3 id="b-additional-generations">B. Additional Generations
+<h3 id="b-caption-filtering-rules">B. Caption Filtering Rules
+</h3><p><strong>Pose Words</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span> POSE_WORDS <span style="color:#f92672">=</span> [
+</span></span><span style="display:flex;"><span> <span style="color:#e6db74">&#34;stand&#34;</span>, <span style="color:#e6db74">&#34;standing&#34;</span>, <span style="color:#e6db74">&#34;sit&#34;</span>, <span style="color:#e6db74">&#34;sitting&#34;</span>, <span style="color:#e6db74">&#34;seated&#34;</span>, <span style="color:#e6db74">&#34;seat&#34;</span>, <span style="color:#e6db74">&#34;kneel&#34;</span>, <span style="color:#e6db74">&#34;kneeling&#34;</span>,
+</span></span><span style="display:flex;"><span> <span style="color:#e6db74">&#34;lying&#34;</span>, <span style="color:#e6db74">&#34;laying&#34;</span>, <span style="color:#e6db74">&#34;lay&#34;</span>, <span style="color:#e6db74">&#34;walk&#34;</span>, <span style="color:#e6db74">&#34;walking&#34;</span>, <span style="color:#e6db74">&#34;run&#34;</span>, <span style="color:#e6db74">&#34;running&#34;</span>, <span style="color:#e6db74">&#34;jump&#34;</span>, <span style="color:#e6db74">&#34;jumping&#34;</span>,
+</span></span><span style="display:flex;"><span> <span style="color:#e6db74">&#34;crouch&#34;</span>, <span style="color:#e6db74">&#34;crouching&#34;</span>, <span style="color:#e6db74">&#34;bend&#34;</span>, <span style="color:#e6db74">&#34;bending&#34;</span>, <span style="color:#e6db74">&#34;bent&#34;</span>, <span style="color:#e6db74">&#34;lean&#34;</span>, <span style="color:#e6db74">&#34;leaning&#34;</span>, <span style="color:#e6db74">&#34;reach&#34;</span>,
+</span></span><span style="display:flex;"><span> <span style="color:#e6db74">&#34;reaching&#34;</span>, <span style="color:#e6db74">&#34;stretch&#34;</span>, <span style="color:#e6db74">&#34;stretching&#34;</span>, <span style="color:#e6db74">&#34;pose&#34;</span>, <span style="color:#e6db74">&#34;posing&#34;</span>, <span style="color:#e6db74">&#34;gesture&#34;</span>, <span style="color:#e6db74">&#34;gesturing&#34;</span>,
+</span></span><span style="display:flex;"><span> <span style="color:#e6db74">&#34;arms crossed&#34;</span>, <span style="color:#e6db74">&#34;legs crossed&#34;</span>, <span style="color:#e6db74">&#34;looking back&#34;</span>, <span style="color:#e6db74">&#34;over her shoulder&#34;</span>,
+</span></span><span style="display:flex;"><span> <span style="color:#e6db74">&#34;over his shoulder&#34;</span>, <span style="color:#e6db74">&#34;turned&#34;</span>, <span style="color:#e6db74">&#34;twisted&#34;</span>, <span style="color:#e6db74">&#34;squat&#34;</span>, <span style="color:#e6db74">&#34;squatting&#34;</span>, <span style="color:#e6db74">&#34;hands on hips&#34;</span>,
+</span></span><span style="display:flex;"><span> <span style="color:#e6db74">&#34;tiptoe&#34;</span>, <span style="color:#e6db74">&#34;dancing&#34;</span>, <span style="color:#e6db74">&#34;stance&#34;</span>, <span style="color:#e6db74">&#34;posture&#34;</span>, <span style="color:#e6db74">&#34;curled&#34;</span>, <span style="color:#e6db74">&#34;arched&#34;</span>, <span style="color:#e6db74">&#34;tilted&#34;</span>, <span style="color:#e6db74">&#34;propped&#34;</span>,
+</span></span><span style="display:flex;"><span> <span style="color:#e6db74">&#34;straddling&#34;</span>, <span style="color:#e6db74">&#34;prone&#34;</span>, <span style="color:#e6db74">&#34;supine&#34;</span>, <span style="color:#e6db74">&#34;upright&#34;</span>, <span style="color:#e6db74">&#34;reclining&#34;</span>, <span style="color:#e6db74">&#34;hunched&#34;</span>, <span style="color:#e6db74">&#34;slouch&#34;</span>,
+</span></span><span style="display:flex;"><span> <span style="color:#e6db74">&#34;raised arm&#34;</span>, <span style="color:#e6db74">&#34;raised arms&#34;</span>, <span style="color:#e6db74">&#34;outstretched&#34;</span>, <span style="color:#e6db74">&#34;mid-stride&#34;</span>, <span style="color:#e6db74">&#34;mid-flight&#34;</span>,
+</span></span><span style="display:flex;"><span> <span style="color:#e6db74">&#34;extended forward&#34;</span>, <span style="color:#e6db74">&#34;riding&#34;</span>, <span style="color:#e6db74">&#34;ride&#34;</span>, <span style="color:#e6db74">&#34;astride&#34;</span>, <span style="color:#e6db74">&#34;mounted&#34;</span>, <span style="color:#e6db74">&#34;mounting&#34;</span>, <span style="color:#e6db74">&#34;perched&#34;</span>,
+</span></span><span style="display:flex;"><span>]
+</span></span></code></pre></div><p><strong>Framing Words</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>FRAMING_WORDS <span style="color:#f92672">=</span> [
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;close-up&#34;</span>, <span style="color:#e6db74">&#34;close up&#34;</span>, <span style="color:#e6db74">&#34;medium shot&#34;</span>, <span style="color:#e6db74">&#34;wide shot&#34;</span>, <span style="color:#e6db74">&#34;full shot&#34;</span>, <span style="color:#e6db74">&#34;full-length shot&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;medium close-up&#34;</span>, <span style="color:#e6db74">&#34;extreme close-up&#34;</span>, <span style="color:#e6db74">&#34;headshot&#34;</span>, <span style="color:#e6db74">&#34;head shot&#34;</span>, <span style="color:#e6db74">&#34;portrait shot&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;portrait-style&#34;</span>, <span style="color:#e6db74">&#34;cowboy shot&#34;</span>, <span style="color:#e6db74">&#34;waist up&#34;</span>, <span style="color:#e6db74">&#34;waist-up&#34;</span>, <span style="color:#e6db74">&#34;knees up&#34;</span>, <span style="color:#e6db74">&#34;knees-up&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;chest up&#34;</span>, <span style="color:#e6db74">&#34;shoulders up&#34;</span>, <span style="color:#e6db74">&#34;from the waist&#34;</span>, <span style="color:#e6db74">&#34;entire figure&#34;</span>, <span style="color:#e6db74">&#34;entire statue&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;full body shot&#34;</span>, <span style="color:#e6db74">&#34;full-body shot&#34;</span>, <span style="color:#e6db74">&#34;full-length&#34;</span>,
+</span></span><span style="display:flex;"><span>]
+</span></span></code></pre></div><h3 id="c-additional-generations">C. Additional Generations
 </h3><p>The following figures illustrate how the same pose condition can produce different visual styles while preserving the underlying body geometry.</p>
 <p><img alt="Gothic duo pose conditioning and generated images" loading="lazy" sizes="(max-width: 767px) calc(100vw - 30px), (max-width: 1023px) 700px, (max-width: 1279px) 950px, 1232px" src="/images/blog/krea2/gothic.png">
 </p>
-<p><em>Figure B1 — Gothic duo: pose conditioning and generated images across different visual styles.</em></p>
+<p><em>Figure C1 — Gothic duo: pose conditioning and generated images across different visual styles.</em></p>
 <p><img alt="Mage and jester pose conditioning comparisons" loading="lazy" sizes="(max-width: 767px) calc(100vw - 30px), (max-width: 1023px) 700px, (max-width: 1279px) 950px, 1232px" src="/images/blog/krea2/mage_jester.png">
 </p>
-<p><em>Figure B2 — Mage and jester: pose conditioning and corresponding generations.</em></p>
+<p><em>Figure C2 — Mage and jester: pose conditioning and corresponding generations.</em></p>
 <p>The following collage presents additional generations across a variety of prompts, artistic styles, and visual compositions.</p>
 <p><img alt="Additional Pose Control LoRA generations" loading="lazy" sizes="(max-width: 767px) calc(100vw - 30px), (max-width: 1023px) 700px, (max-width: 1279px) 950px, 1232px" src="/images/blog/krea2/Appendix.png">
 </p>
-<p><em>Figure B3 — Additional generations showcasing the model&rsquo;s diversity across artistic styles and prompts.</em></p>
+<p><em>Figure C3 — Additional generations showcasing the model&rsquo;s diversity across artistic styles and prompts.</em></p>
 </section><link 
                 rel="stylesheet" 
                 href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI&#43;WdtXRGWt2kTvGFasHpSy3SV"crossorigin="anonymous"
@@ -1143,7 +1149,7 @@ $$\operatorname{CLIPSim}(I,T)=\frac{f_I(I)\cdot f_T(T)}{\left\|f_I(I)\right\|_2\
             </main>
         </div>
         
-<script type="text/javascript" src="/ts/main.b6e6f296f88b87a5b1ef3fb69d6e6193d5f097c5c874667ea5ec9447b5a04d86.js" defer></script><script type="text/javascript" src="/ts/custom.05fcce7b0fec8cea073248644a75fe04c10e6c0954f1112808f34eb03ec59b6b.js" defer></script>
+<script type="text/javascript" src="/ts/main.75d3f82b73dbabf684d20be5f162ab346b26ddad3d2d0af69773d322d1d42c92.js" defer></script><script type="text/javascript" src="/ts/custom.2d7c218ff906122048a1b449a51cb2d5a756126890726a7ce11898fb476a218f.js" defer></script>
 
 
 <footer></footer>

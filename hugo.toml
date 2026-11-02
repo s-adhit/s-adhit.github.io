@@ -30,8 +30,8 @@ theme = "stack"
     toc = false   #
 
   [params.colorScheme]
-    toggle = false
-    default = "dark"
+    toggle = true
+    default = "auto"
 
   [params.style]
     colorScheme = "dark"

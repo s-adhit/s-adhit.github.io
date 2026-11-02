@@ -1,0 +1,24 @@
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#191919">
+<script>
+  (function () {
+    var key = 'AdhitThemePreference';
+    var preference = null;
+    try {
+      var saved = window.localStorage.getItem(key);
+      if (saved === 'light' || saved === 'dark') preference = saved;
+    } catch (error) {
+      // Privacy modes can deny storage; use the operating-system preference.
+    }
+
+    var systemDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    var scheme = preference || (systemDark ? 'dark' : 'light');
+    var root = document.documentElement;
+    root.dataset.scheme = scheme;
+    root.dataset.themePreference = scheme;
+    root.style.colorScheme = scheme;
+
+    var themeColor = document.querySelector('meta[name="theme-color"]');
+    if (themeColor) themeColor.setAttribute('content', scheme === 'dark' ? '#191919' : '#F8F7FA');
+  })();
+</script>

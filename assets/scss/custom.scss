@@ -2,19 +2,84 @@
    🎨 NOTION BASE
 ========================= */
 
-:root {
+/*
+   Theme tokens
+   The dark values intentionally mirror the pre-existing rendered site.  Light
+   mode only remaps these semantic tokens, so components stay in one system.
+*/
+:root,
+:root[data-scheme="dark"] {
   --bg: #191919;
+  --sidebar-bg: #191919;
+  --surface: #202020;
   --bg-soft: #202020;
+  --code-bg: #1a1a1a;
   --bg-code: #1a1a1a;
 
   --text-main: #e6e6e6;
+  --text-secondary: #a0a0a0;
   --text-dim: #a0a0a0;
 
   --accent: #a78bfa;
+  --accent-hover: #c4b5fd;
+  --accent-subtle: rgba(167, 139, 250, 0.08);
   --accent-soft: #c4b5fd;
 
   --border: #2a2a2a;
+  --heading-main: #ffffff;
+  --code-text: #d4d4d4;
+  --sidebar-link: #b4a7f5;
+  --text-muted: #888;
+  --caption-color: #8a8f98;
+  --overlay-shadow: rgba(0, 0, 0, 0.38);
   --site-sans: "Inter", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+}
+
+:root[data-scheme="light"] {
+  --bg: #F8F7FA;
+  --sidebar-bg: #F8F7FA;
+  --surface: #FFFFFF;
+  --bg-soft: var(--surface);
+  --code-bg: #F0ECF5;
+  --bg-code: var(--code-bg);
+
+  --text-main: #24212C;
+  --text-secondary: #706B79;
+  --text-dim: var(--text-secondary);
+
+  --accent: #7150AB;
+  --accent-hover: #56378D;
+  --accent-subtle: #EEE8F7;
+  --accent-soft: var(--accent-hover);
+
+  --border: #E5E1EA;
+  --heading-main: var(--text-main);
+  --code-text: var(--text-main);
+  --sidebar-link: var(--accent);
+  --text-muted: var(--text-secondary);
+  --caption-color: var(--text-secondary);
+  --overlay-shadow: rgba(36, 33, 44, 0.16);
+
+  /* Stack's native components use these variables outside the custom layouts. */
+  --body-background: var(--bg);
+  --body-text-color: var(--text-secondary);
+  --accent-color: var(--accent);
+  --accent-color-darker: var(--accent-hover);
+  --accent-color-text: #FFFFFF;
+  --card-background: var(--surface);
+  --card-background-selected: var(--accent-subtle);
+  --card-text-color-main: var(--text-main);
+  --card-text-color-secondary: var(--text-secondary);
+  --card-text-color-tertiary: var(--text-secondary);
+  --card-separator-color: var(--border);
+  --blockquote-background-color: var(--accent-subtle);
+  --code-background-color: var(--code-bg);
+  --code-text-color: var(--text-main);
+  --table-border-color: var(--border);
+  --tr-even-background-color: var(--code-bg);
+  --kbd-border-color: var(--border);
+  --pre-background-color: var(--code-bg);
+  --pre-text-color: var(--text-main);
 }
 
 /* =========================
@@ -44,7 +109,7 @@ body {
 ========================= */
 
 .sidebar {
-  background: var(--bg) !important;
+  background: var(--sidebar-bg) !important;
   border-right: none !important;
 }
 
@@ -59,7 +124,7 @@ body {
   padding: 4px 6px;
   border-radius: 6px;
 
-  color: #b4a7f5 !important;
+  color: var(--sidebar-link) !important;
   font-size: 14px;
 }
 
@@ -105,7 +170,7 @@ body {
 
 /* Headings */
 .article h1 {
-  color: #ffffff;
+  color: var(--heading-main);
 }
 
 .article h2,
@@ -211,7 +276,7 @@ pre,
 code {
   background: var(--bg-code);
   border: 1px solid var(--border);
-  color: #d4d4d4;
+  color: var(--code-text);
 }
 
 blockquote {
@@ -300,13 +365,13 @@ blockquote {
 
 /* links */
 .notes-list a {
-  color: #a78bfa;
+  color: var(--accent);
   text-decoration: none;
 }
 
 /* hover */
 .notes-list a:hover {
-  color: #c4b5fd;
+  color: var(--accent-hover);
   text-decoration: underline;
 }
 
@@ -323,12 +388,12 @@ blockquote {
 .note-date {
   margin-left: 8px;
   font-size: 12px;
-  color: #888;
+  color: var(--text-muted);
 }
 
 figcaption {
   font-size: 12.5px;
-  color: #8a8f98;
+  color: var(--caption-color);
   font-style: italic;
 }
 /* =========================
@@ -366,7 +431,7 @@ figcaption {
 
 .blog-article-header h1 {
   margin: 0 0 8px;
-  color: #fff;
+  color: var(--heading-main);
 }
 
 .blog-article-meta {
@@ -400,7 +465,7 @@ figcaption {
 
 .blog-resource-link:hover {
   border-color: var(--accent);
-  color: var(--accent-soft);
+  color: var(--accent-hover);
   text-decoration: none;
 }
 
@@ -550,6 +615,34 @@ figcaption {
   height: auto;
 }
 
+/* Two pre-rendered variants let the browser snapshot the active image in a theme wipe. */
+.theme-image {
+  max-width: 100%;
+}
+
+.theme-image__image {
+  display: none;
+  max-width: 100%;
+  height: auto;
+}
+
+.theme-image__image--single,
+:root[data-scheme="light"] .theme-image__image--light,
+:root[data-scheme="dark"] .theme-image__image--dark {
+  display: block;
+}
+
+.theme-image > a {
+  display: block;
+  max-width: 100%;
+}
+
+.theme-image figcaption {
+  margin-top: 6px;
+  color: var(--text-dim);
+  font-size: 12.5px;
+}
+
 .blog-article-content figcaption {
   margin-top: 6px;
   color: var(--text-dim);
@@ -668,7 +761,7 @@ figcaption {
 .article-content th,
 .collapsible-table th {
   color: var(--accent-soft);
-  background: rgba(167, 139, 250, 0.08);
+  background: var(--accent-subtle);
   font-weight: 600;
   letter-spacing: 0.01em;
 }
@@ -857,7 +950,7 @@ figcaption {
   border: 1px solid var(--border);
   border-radius: 0.6rem;
   background: var(--bg-soft);
-  box-shadow: 0 0.8rem 2.4rem rgba(0, 0, 0, 0.38);
+  box-shadow: 0 0.8rem 2.4rem var(--overlay-shadow);
   color: var(--text-main);
   font-size: 1.35rem;
   line-height: 1.45;
@@ -914,23 +1007,107 @@ figcaption {
   position: absolute;
   bottom: 20px;
   left: 20px;
+}
 
+.sidebar-social-links {
   display: flex;
+  align-items: center;
   gap: 14px;
 }
 
-/* icon style */
-.sidebar-socials svg {
+.sidebar-social-links :is(a, .theme-toggle) {
+  color: var(--sidebar-link);
+}
+
+.sidebar-social-links svg,
+.theme-toggle svg {
   width: 18px;
   height: 18px;
-
   opacity: 0.7;
   transition: opacity 0.2s ease;
 }
 
-/* hover */
-.sidebar-socials svg:hover {
+.theme-toggle {
+  position: relative;
+  display: inline-grid;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: 0;
+  cursor: pointer;
+  place-items: center;
+}
+
+.theme-toggle svg {
+  grid-area: 1 / 1;
+  transition: opacity 160ms ease;
+}
+
+.theme-toggle__sun {
+  opacity: 0;
+}
+
+:root[data-scheme="dark"] .theme-toggle__moon {
+  opacity: 0;
+}
+
+:root[data-scheme="dark"] .theme-toggle__sun {
+  opacity: 0.7;
+}
+
+.sidebar-social-links a:hover svg,
+.sidebar-social-links a:focus-visible svg,
+.theme-toggle:hover svg,
+.theme-toggle:focus-visible svg {
   opacity: 1;
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
+/* The View Transition snapshot is the only full-page theme animation. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+html.theme-transitioning::view-transition-old(root) {
+  z-index: 1;
+}
+
+html.theme-transitioning::view-transition-new(root) {
+  z-index: 2;
+  animation: theme-reveal 650ms cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+
+@keyframes theme-reveal {
+  from {
+    clip-path: circle(0 at var(--theme-reveal-x) var(--theme-reveal-y));
+  }
+  to {
+    clip-path: circle(var(--theme-reveal-radius) at var(--theme-reveal-x) var(--theme-reveal-y));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-toggle svg {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* KaTeX inherits article text in most cases; declare it for the custom layouts too. */
+.blog-article-content .katex,
+.notes-article-content .katex,
+.article-content .katex {
+  color: var(--text-main);
+}
+
+:root[data-scheme="light"] :is(.highlight, .highlight pre) {
+  background-color: var(--code-bg);
+  color: var(--text-main);
 }
 
 /* =========================
@@ -985,7 +1162,7 @@ figcaption {
   .sidebar-socials {
     position: static;
     display: none;
-    gap: 14px;
+    gap: 12px;
     margin: 0;
     padding: 0 16px 20px;
   }
@@ -994,10 +1171,15 @@ figcaption {
     display: flex;
   }
 
-  .sidebar-socials a {
+  .sidebar-social-links a {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    width: 44px;
+    height: 44px;
+  }
+
+  .theme-toggle {
     width: 44px;
     height: 44px;
   }

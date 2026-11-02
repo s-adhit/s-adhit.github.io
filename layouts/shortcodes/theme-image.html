@@ -1,0 +1,23 @@
+{{- $light := .Get "light" -}}
+{{- $dark := .Get "dark" -}}
+{{- $alt := .Get "alt" | default "" -}}
+{{- $caption := .Get "caption" -}}
+{{- $href := .Get "href" -}}
+{{- $width := .Get "width" -}}
+{{- $height := .Get "height" -}}
+{{- /* Both variants are eagerly available so a View Transition can snapshot either one. */ -}}
+{{- $loading := .Get "loading" | default "eager" -}}
+{{- if not $light -}}
+  {{- errorf "theme-image shortcode: light is required in %s" .Page.File.Path -}}
+{{- end -}}
+<figure class="theme-image">
+  {{- with $href }}<a href="{{ . | safeURL }}" class="image-link">{{ end -}}
+  {{- if $dark -}}
+    <img class="theme-image__image theme-image__image--light" src="{{ $light | relURL }}" alt="{{ $alt }}" loading="{{ $loading }}"{{ with $width }} width="{{ . }}"{{ end }}{{ with $height }} height="{{ . }}"{{ end }}>
+    <img class="theme-image__image theme-image__image--dark" src="{{ $dark | relURL }}" alt="{{ $alt }}" loading="{{ $loading }}"{{ with $width }} width="{{ . }}"{{ end }}{{ with $height }} height="{{ . }}"{{ end }}>
+  {{- else -}}
+    <img class="theme-image__image theme-image__image--single" src="{{ $light | relURL }}" alt="{{ $alt }}" loading="{{ $loading }}"{{ with $width }} width="{{ . }}"{{ end }}{{ with $height }} height="{{ . }}"{{ end }}>
+  {{- end -}}
+  {{- with $href }}</a>{{ end -}}
+  {{- with $caption }}<figcaption>{{ . }}</figcaption>{{ end -}}
+</figure>

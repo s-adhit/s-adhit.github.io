@@ -26,6 +26,101 @@ document.addEventListener('DOMContentLoaded', () => {
     syncMenuState();
 });
 
+/** The head initializer sets the first theme before paint; this owns explicit changes. */
+document.addEventListener('DOMContentLoaded', () => {
+    type Scheme = 'light' | 'dark';
+    type ViewTransitionDocument = Document & {
+        startViewTransition?: (callback: () => void) => { finished: Promise<void> };
+    };
+
+    const key = 'AdhitThemePreference';
+    const root = document.documentElement;
+    const toggle = document.querySelector<HTMLButtonElement>('[data-theme-toggle]');
+    if (!toggle) return;
+
+    let transitioning = false;
+
+    const updateMetadata = (scheme: Scheme) => {
+        root.style.colorScheme = scheme;
+        const themeColor = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+        themeColor?.setAttribute('content', scheme === 'dark' ? '#191919' : '#F8F7FA');
+    };
+
+    const updateControl = (scheme: Scheme) => {
+        const label = scheme === 'light' ? 'Switch to dark mode' : 'Switch to light mode';
+        toggle.setAttribute('aria-label', label);
+        toggle.title = label;
+        toggle.setAttribute('aria-pressed', String(scheme === 'dark'));
+    };
+
+    const apply = (scheme: Scheme, persist = false) => {
+        root.dataset.scheme = scheme;
+        root.dataset.themePreference = scheme;
+        updateMetadata(scheme);
+        updateControl(scheme);
+        window.dispatchEvent(new CustomEvent('onColorSchemeChange', { detail: scheme }));
+
+        if (!persist) return;
+        try {
+            window.localStorage.setItem(key, scheme);
+            // Retain Stack compatibility for integrations that read its legacy key.
+            window.localStorage.setItem('StackColorScheme', scheme);
+        } catch (error) {
+            // Storage can be denied; the in-memory selection still takes effect.
+        }
+    };
+
+    const currentScheme = (): Scheme => root.dataset.scheme === 'light' ? 'light' : 'dark';
+    apply(currentScheme());
+
+    const reduceMotion = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+
+    toggle.addEventListener('click', () => {
+        if (transitioning) return;
+
+        const next: Scheme = currentScheme() === 'light' ? 'dark' : 'light';
+        const startViewTransition = (document as ViewTransitionDocument).startViewTransition;
+        const canTransition = typeof startViewTransition === 'function' && !reduceMotion();
+        if (!canTransition) {
+            apply(next, true);
+            return;
+        }
+
+        const rect = toggle.getBoundingClientRect();
+        const x = rect.left + rect.width / 2;
+        const y = rect.top + rect.height / 2;
+        const radius = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y));
+        root.style.setProperty('--theme-reveal-x', `${x}px`);
+        root.style.setProperty('--theme-reveal-y', `${y}px`);
+        root.style.setProperty('--theme-reveal-radius', `${radius}px`);
+        root.classList.add('theme-transitioning');
+        transitioning = true;
+        toggle.disabled = true;
+
+        const finish = () => {
+            root.classList.remove('theme-transitioning');
+            root.style.removeProperty('--theme-reveal-x');
+            root.style.removeProperty('--theme-reveal-y');
+            root.style.removeProperty('--theme-reveal-radius');
+            transitioning = false;
+            toggle.disabled = false;
+        };
+
+        try {
+            const transition = startViewTransition?.call(document, () => apply(next, true));
+            if (!transition) {
+                apply(next, true);
+                finish();
+                return;
+            }
+            void transition.finished.catch(() => undefined).finally(finish);
+        } catch (error) {
+            apply(next, true);
+            finish();
+        }
+    });
+});
+
 /** Keep the desktop Blog outline in sync without changing native anchor behavior. */
 document.addEventListener('DOMContentLoaded', () => {
     const article = document.querySelector<HTMLElement>('.blog-article');
