@@ -1,7 +1,7 @@
 ---
 title: "Training a Pose Control LoRA for Krea-2"
 date: 2026-11-02
-draft: true
+draft: false
 description: "Building a pose-conditioned ControlNet for Krea-2, from dataset preparation and pose extraction to model training and evaluation."
 tags:
   - Projects
