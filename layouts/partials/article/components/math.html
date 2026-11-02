@@ -1,0 +1,26 @@
+{{- partial "helper/external" (dict "Context" . "Namespace" "KaTeX") -}}
+<script>
+    // The deferred KaTeX files above are ready before DOMContentLoaded.
+    // Render the content containers used by Stack and the custom Blog/Notes layouts.
+    document.addEventListener("DOMContentLoaded", () => {
+        if (typeof window.renderMathInElement !== "function") return;
+
+        document.querySelectorAll(".main-article, .blog-article-content, .notes-article-content")
+            .forEach(element => {
+                if (element.dataset.mathRendered === "true") return;
+
+                window.renderMathInElement(element, {
+                    delimiters: [
+                        { left: "$$", right: "$$", display: true },
+                        { left: "\\[", right: "\\]", display: true },
+                        { left: "$", right: "$", display: false },
+                        { left: "\\(", right: "\\)", display: false }
+                    ],
+                    ignoredTags: ["script", "noscript", "style", "textarea", "pre", "code"],
+                    ignoredClasses: ["gist"],
+                    throwOnError: false
+                });
+                element.dataset.mathRendered = "true";
+            });
+    });
+</script>

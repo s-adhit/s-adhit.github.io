@@ -1,0 +1,23 @@
+{{- $references := .Page.Params.references | default slice -}}
+{{- if not $references -}}
+  {{- errorf "references shortcode: no references were defined in %s" .Page.File.Path -}}
+{{- end -}}
+{{- $hasAuthorReferencesHeading := gt (len (findRE `(?mi)^#{1,6}[[:space:]]+.*[Rr]eferences.*$` .Page.RawContent)) 0 -}}
+<section class="references"{{ if $hasAuthorReferencesHeading }} aria-label="References"{{ else }} aria-labelledby="references-heading"{{ end }}>
+  {{- if not $hasAuthorReferencesHeading }}
+  <h2 id="references-heading">References</h2>
+  {{- end }}
+  <ol class="references__list">
+    {{- range $index, $reference := $references -}}
+      {{- $id := $reference.id -}}
+      {{- $text := $reference.citation | default $reference.text -}}
+      {{- if not $id -}}
+        {{- errorf "references shortcode: reference %d in %s needs an id" (add $index 1) $.Page.File.Path -}}
+      {{- end -}}
+      {{- if not $text -}}
+        {{- errorf "references shortcode: reference %q in %s needs a citation field" $id $.Page.File.Path -}}
+      {{- end -}}
+      <li id="ref-{{ $id | anchorize }}" class="references__item">{{ $.Page.RenderString (dict "display" "inline") $text }}</li>
+    {{- end -}}
+  </ol>
+</section>

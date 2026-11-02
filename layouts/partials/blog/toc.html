@@ -1,0 +1,19 @@
+{{- if .Params.toc -}}
+  {{- $toc := .TableOfContents -}}
+  {{- /* Keep Hugo's generated heading URLs and IDs intact. */ -}}
+  {{- $toc = replace $toc `<nav id="TableOfContents">` `<div class="blog-toc-list">` -}}
+  {{- $toc = replace $toc `</nav>` `</div>` -}}
+  {{- if gt (len (findRE `<a href=` $toc)) 0 -}}
+<aside class="blog-article-toc blog-article-toc--notion" data-blog-outline-desktop>
+  <nav class="blog-outline__panel" aria-label="On this page">
+    {{ $toc | safeHTML }}
+  </nav>
+</aside>
+<details class="blog-article-toc blog-article-toc--mobile">
+  <summary>On this page</summary>
+  <nav class="blog-outline__panel" aria-label="On this page">
+    {{ $toc | safeHTML }}
+  </nav>
+</details>
+  {{- end -}}
+{{- end -}}

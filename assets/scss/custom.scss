@@ -14,6 +14,7 @@
   --accent-soft: #c4b5fd;
 
   --border: #2a2a2a;
+  --site-sans: "Inter", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
 }
 
 /* =========================
@@ -23,6 +24,7 @@
 body {
   background-color: var(--bg);
   color: var(--text-main);
+  font-family: var(--site-sans);
 }
 
 /* =========================
@@ -102,38 +104,62 @@ body {
 ========================= */
 
 /* Headings */
-.article h1,
-.home-content h1 {
+.article h1 {
   color: #ffffff;
 }
 
 .article h2,
 .article h3,
 .article h4,
+.home-content h1,
 .home-content h2,
 .home-content h3,
-.home-content h4 {
+.home-content h4,
+.home-content h5,
+.home-content h6 {
   color: var(--accent);
 }
 
-/* Bold */
-.article strong,
-.home-content strong {
+/* Markdown and inline accents, scoped to the custom homepage layout. */
+.home-content :is(strong, b) {
   color: var(--accent);
   font-weight: 600;
 }
 
-/* Links */
-.article a,
+.home-content .accent { color: var(--accent); }
+
 .home-content a {
   color: var(--accent);
   text-decoration: none;
 }
 
-.article a:hover,
-.home-content a:hover {
+.home-content a:hover,
+.home-content a:focus-visible {
   color: var(--accent-soft);
   text-decoration: underline;
+}
+
+/* Blog and Notes Markdown accents. */
+.blog-article-content :is(strong, b),
+.notes-article-content :is(strong, b) {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* Links */
+.blog-article-content a:not(.citation__link),
+.notes-article-content a:not(.citation__link) {
+  color: var(--accent);
+  text-decoration-line: underline;
+  text-decoration-thickness: 0.1em;
+  text-underline-offset: 0.14em;
+}
+
+.blog-article-content a:not(.citation__link):hover,
+.blog-article-content a:not(.citation__link):focus-visible,
+.notes-article-content a:not(.citation__link):hover,
+.notes-article-content a:not(.citation__link):focus-visible {
+  color: var(--accent-soft);
 }
 
 /* =========================
@@ -327,6 +353,556 @@ figcaption {
 }
 
 /* =========================
+   BLOG ARTICLE ENHANCEMENTS
+   Scoped to /blog/ singles so other sections retain their existing design.
+========================= */
+
+.main > .blog-article {
+  max-width: 700px;
+  margin: 40px 0 0 20px;
+  color: var(--text-main);
+  position: relative;
+}
+
+.blog-article-header h1 {
+  margin: 0 0 8px;
+  color: #fff;
+}
+
+.blog-article-meta {
+  margin: 0;
+  color: var(--text-dim);
+  font-size: 14px;
+}
+
+.blog-resource-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.blog-resource-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 36px;
+  padding: 7px 11px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-main);
+  background: var(--bg-soft);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
+}
+
+.blog-resource-link:hover {
+  border-color: var(--accent);
+  color: var(--accent-soft);
+  text-decoration: none;
+}
+
+.blog-resource-logo {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
+  object-fit: contain;
+}
+
+.blog-toc-list ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.blog-toc-list li {
+  margin: 0;
+  min-width: 0;
+}
+
+/* Hugo can emit an empty list item for an explicit heading ID with no text. */
+.blog-toc-list li:not(:has(a)) {
+  display: none;
+}
+
+.blog-toc-list a {
+  display: block;
+  color: var(--text-dim);
+  font-size: 13px;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+  text-decoration: none;
+}
+
+.blog-toc-list a:hover,
+.blog-toc-list a:focus-visible {
+  color: var(--text-main);
+  text-decoration: none;
+}
+
+.blog-toc-list a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.blog-article-toc--notion { display: none; }
+
+/* The native disclosure is the no-JavaScript TOC for tablet and mobile. */
+.blog-article-toc--mobile {
+  position: relative;
+  z-index: 2;
+  margin-top: 18px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg-soft);
+}
+
+.blog-article-toc--mobile summary {
+  min-height: 40px;
+  padding: 10px 12px;
+  color: var(--text-main);
+  cursor: pointer;
+  font: 600 13px/1.2 var(--site-sans);
+}
+
+.blog-article-toc--mobile .blog-outline__panel {
+  margin: 0 12px 12px;
+  max-height: 50vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.blog-article-toc--mobile .blog-toc-list { padding: 4px 0 4px 10px; border-inline-start: 1px solid var(--border); }
+.blog-article-toc--mobile .blog-toc-list a { padding: 4px 8px; }
+.blog-article-toc--mobile .blog-toc-list ul ul { padding-left: 12px; }
+.blog-article-toc--mobile .blog-toc-list ul ul a { font-size: 12px; }
+.blog-toc-list a[aria-current="location"] { color: var(--accent); }
+
+.blog-article-content {
+  min-width: 0;
+  margin-top: 16px;
+}
+
+.blog-article-content p {
+  line-height: 1.8;
+  margin-bottom: 16px;
+}
+
+.blog-article-content h2,
+.blog-article-content h3,
+.blog-article-content h4 {
+  color: var(--accent);
+}
+
+.blog-article-content :is(h2, h3) {
+  scroll-margin-top: 24px;
+}
+
+/* The rail uses measured unused gutter space and never reserves article width. */
+@media (min-width: 1440px) {
+  .blog-article-toc--notion { position: fixed; top: var(--blog-outline-top, 40px); left: var(--blog-outline-left); z-index: 3; display: none; width: 34px; max-height: calc(100vh - var(--blog-outline-top, 40px) - 24px); margin: 0; }
+  .blog-article-toc--mobile { display: block; }
+  .blog-article-toc--notion.blog-outline--ready:not(.blog-outline--no-gutter) { display: block; }
+  .blog-article-toc--notion.blog-outline--ready:not(.blog-outline--no-gutter) + .blog-article-toc--mobile { display: none; }
+  .blog-article-toc--notion .blog-outline__panel { box-sizing: border-box; width: 34px; max-width: var(--blog-outline-width, 280px); max-height: calc(100vh - var(--blog-outline-top, 40px) - 24px); margin: 0; overflow-x: hidden; overflow-y: auto; transition: width 160ms ease, background-color 160ms ease, border-color 160ms ease; }
+  .blog-article-toc--notion .blog-toc-list { padding: 7px 0; border: 0; }
+  .blog-article-toc--notion .blog-toc-list a { display: block; width: 20px; height: 3px; margin: 6px 0 6px auto; padding: 0; overflow: hidden; border-radius: 2px; background: var(--text-dim); color: transparent; font-size: 0; line-height: 0; opacity: .65; transition: width 160ms ease, background-color 160ms ease, opacity 160ms ease; }
+  .blog-article-toc--notion .blog-toc-list ul ul { padding: 0; }
+  .blog-article-toc--notion .blog-toc-list ul ul a { width: 12px; font-size: 0; }
+  .blog-article-toc--notion .blog-toc-list a[aria-current="location"] { width: 30px; background: var(--accent); opacity: 1; }
+  .blog-article-toc--notion.blog-outline--expanded .blog-outline__panel,
+  .blog-article-toc--notion:hover .blog-outline__panel,
+  .blog-article-toc--notion:focus-within .blog-outline__panel { width: var(--blog-outline-width, 280px); padding: 8px; border: 1px solid var(--border); border-radius: 6px; background: var(--bg); }
+  .blog-article-toc--notion.blog-outline--expanded .blog-toc-list,
+  .blog-article-toc--notion:hover .blog-toc-list,
+  .blog-article-toc--notion:focus-within .blog-toc-list { padding: 4px 0 4px 10px; border-inline-start: 1px solid var(--border); }
+  .blog-article-toc--notion.blog-outline--expanded .blog-toc-list a,
+  .blog-article-toc--notion:hover .blog-toc-list a,
+  .blog-article-toc--notion:focus-within .blog-toc-list a { width: auto; height: auto; margin: 0; padding: 4px 8px; overflow: visible; overflow-wrap: anywhere; background: transparent; color: var(--text-dim); font-size: 13px; line-height: 1.35; opacity: 1; }
+  .blog-article-toc--notion.blog-outline--expanded .blog-toc-list ul ul,
+  .blog-article-toc--notion:hover .blog-toc-list ul ul,
+  .blog-article-toc--notion:focus-within .blog-toc-list ul ul { padding-left: 12px; }
+  .blog-article-toc--notion.blog-outline--expanded .blog-toc-list ul ul a,
+  .blog-article-toc--notion:hover .blog-toc-list ul ul a,
+  .blog-article-toc--notion:focus-within .blog-toc-list ul ul a { width: auto; font-size: 12px; }
+  .blog-article-toc--notion.blog-outline--expanded .blog-toc-list a[aria-current="location"],
+  .blog-article-toc--notion:hover .blog-toc-list a[aria-current="location"],
+  .blog-article-toc--notion:focus-within .blog-toc-list a[aria-current="location"] { color: var(--accent); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .blog-article-toc--notion *, .blog-article-toc--notion *::before, .blog-article-toc--notion *::after { transition-duration: 0.01ms !important; }
+}
+
+.blog-article-content img,
+.blog-article-content video,
+.blog-article-content iframe,
+.blog-article-content figure {
+  max-width: 100%;
+}
+
+.blog-article-content img,
+.blog-article-content video {
+  height: auto;
+}
+
+.blog-article-content figcaption {
+  margin-top: 6px;
+  color: var(--text-dim);
+  font-size: 12.5px;
+}
+
+.blog-article-content pre,
+.blog-article-content .highlight,
+.blog-article-content .table-wrapper,
+.blog-article-content .katex-display > .katex {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+/* Keep long display equations inside both custom article layouts on small screens. */
+.blog-article-content .katex-display,
+.notes-article-content .katex-display {
+  max-width: 100%;
+  margin: 1em 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Article type and list rhythm; code and KaTeX retain their own font stacks. */
+.article-content,
+.blog-article-content,
+.notes-article-content {
+  font-family: var(--site-sans);
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+.article-content :is(p, li),
+.blog-article-content :is(p, li),
+.notes-article-content :is(p, li) {
+  line-height: 1.7;
+}
+
+.article-content :is(ul, ol),
+.blog-article-content :is(ul, ol),
+.notes-article-content :is(ul, ol) {
+  padding-left: 26px;
+}
+
+.article-content > :is(ul, ol),
+.blog-article-content > :is(ul, ol),
+.notes-article-content > :is(ul, ol) {
+  margin: 16px 0;
+}
+
+.article-content li + li,
+.blog-article-content li + li,
+.notes-article-content li + li {
+  margin-top: 12px;
+}
+
+.article-content li > :is(ul, ol),
+.blog-article-content li > :is(ul, ol),
+.notes-article-content li > :is(ul, ol) {
+  margin: 12px 0 0;
+}
+
+.article-content li::marker,
+.blog-article-content li::marker,
+.notes-article-content li::marker {
+  color: var(--accent);
+}
+
+.blog-article-content .table-wrapper {
+  display: block;
+}
+
+/*
+   ARTICLE TABLES
+   Tables remain ordinary content by default. The wrapper gives wide tables a
+   local scroll area instead of allowing them to widen the page.
+*/
+.blog-article-content .table-wrapper,
+.article-content .table-wrapper,
+.collapsible-table__content {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.blog-article-content table,
+.article-content table,
+.collapsible-table table {
+  width: 100%;
+  min-width: 42rem;
+  margin: 0 0 1.5rem;
+  border-collapse: collapse;
+  border-spacing: 0;
+  background: var(--bg-soft);
+  font-size: 0.94em;
+  line-height: 1.55;
+}
+
+.blog-article-content th,
+.blog-article-content td,
+.article-content th,
+.article-content td,
+.collapsible-table th,
+.collapsible-table td {
+  padding: 0.7rem 0.85rem;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.blog-article-content th,
+.article-content th,
+.collapsible-table th {
+  color: var(--accent-soft);
+  background: rgba(167, 139, 250, 0.08);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.blog-article-content tbody tr:last-child td,
+.article-content tbody tr:last-child td,
+.collapsible-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.blog-article-content td,
+.article-content td,
+.collapsible-table td {
+  overflow-wrap: anywhere;
+}
+
+/* Goldmark emits these styles for Markdown columns declared with ---:. */
+.blog-article-content :is(th, td)[style*="text-align: right"],
+.article-content :is(th, td)[style*="text-align: right"],
+.collapsible-table :is(th, td)[style*="text-align: right"] {
+  padding-right: 1rem;
+  white-space: nowrap;
+}
+
+/* Opt-in disclosure wrapper supplied by layouts/shortcodes/collapsible-table.html. */
+.collapsible-table {
+  margin: 1.5rem 0;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg-soft);
+}
+
+.collapsible-table > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-height: 4.8rem;
+  padding: 1.2rem 1.6rem;
+  color: var(--text-main);
+  cursor: pointer;
+  font-size: 1.6rem;
+  font-weight: 500;
+  list-style: none;
+}
+
+.collapsible-table > summary::marker {
+  content: "";
+}
+
+.collapsible-table > summary::-webkit-details-marker {
+  display: none;
+}
+
+.collapsible-table > summary::after {
+  width: 0.7rem;
+  height: 0.7rem;
+  flex: 0 0 auto;
+  margin-left: 0.25rem;
+  border-right: 2px solid var(--accent);
+  border-bottom: 2px solid var(--accent);
+  content: "";
+  transform: rotate(45deg) translateY(-0.2rem);
+  transition: transform 0.15s ease;
+}
+
+.collapsible-table[open] > summary::after {
+  transform: rotate(225deg) translate(-0.2rem, -0.2rem);
+}
+
+.collapsible-table__title {
+  color: var(--accent-soft);
+}
+
+.collapsible-table__hint {
+  color: var(--text-dim);
+  margin-left: auto;
+  font-size: 1.35rem;
+  font-weight: 400;
+}
+
+.collapsible-table__collapse-label {
+  display: none;
+}
+
+.collapsible-table[open] .collapsible-table__expand-label {
+  display: none;
+}
+
+.collapsible-table[open] .collapsible-table__collapse-label {
+  display: inline;
+}
+
+.collapsible-table__description {
+  margin: 0;
+  padding: 0 0.85rem 0.7rem;
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.collapsible-table__content {
+  border-top: 1px solid var(--border);
+}
+
+.collapsible-table__content table {
+  margin-bottom: 0;
+}
+
+.collapsible-table > summary:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* Automatic disclosures are emitted only by layouts/blog/single.html. */
+.blog-article-content .blog-table {
+  margin: 1.5rem 0;
+}
+
+.blog-article-content .blog-table .collapsible-table__content {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.blog-article-content .blog-table table {
+  width: 100%;
+  min-width: 44rem;
+  margin: 0;
+}
+
+/* Keep labels and values intact while allowing the final description column to read naturally. */
+.blog-article-content .blog-table :is(th, td):not(:last-child) {
+  white-space: nowrap;
+  overflow-wrap: normal;
+}
+
+.blog-article-content .blog-table :is(th, td):last-child {
+  min-width: 16rem;
+  white-space: normal;
+  overflow-wrap: normal;
+}
+
+.blog-resource-link:focus-visible,
+.blog-article-toc--mobile summary:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.blog-article-content :not(pre) > code,
+.notes-article-content :not(pre) > code {
+  padding: 0.15em 0.35em;
+  border: 1px solid var(--border);
+  border-radius: 0.3rem;
+  background: var(--bg-code);
+  color: var(--accent);
+}
+
+.citation {
+  margin: 0 0.08em;
+  font-size: 0.78em;
+  line-height: 0;
+}
+
+.citation__link {
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-thickness: 0.1em;
+  text-underline-offset: 0.14em;
+}
+
+.citation__link:hover,
+.citation__link:focus-visible {
+  color: var(--accent-soft);
+}
+
+.citation-preview {
+  position: fixed;
+  z-index: 1000;
+  max-width: 100%;
+  max-width: unquote("min(100%, calc(100vw - 2rem))");
+  padding: 0.9rem 1.1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  background: var(--bg-soft);
+  box-shadow: 0 0.8rem 2.4rem rgba(0, 0, 0, 0.38);
+  color: var(--text-main);
+  font-size: 1.35rem;
+  line-height: 1.45;
+  pointer-events: none;
+}
+
+.references {
+  margin: 3rem 0 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+  color: var(--text-main);
+  font-family: var(--site-sans);
+}
+
+.references__list {
+  max-width: 100%;
+  margin: 0;
+  padding-left: 2.45rem;
+}
+
+.references__item {
+  margin: 1.1rem 0;
+  padding-left: 0.4rem;
+  color: var(--text-main);
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+  scroll-margin-top: 2rem;
+}
+
+.references__item::marker {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.references__item a {
+  color: var(--accent);
+  overflow-wrap: anywhere;
+}
+
+.references__item a:hover,
+.references__item a:focus-visible {
+  color: var(--accent-soft);
+}
+
+/* =========================
    🔗 SIDEBAR SOCIALS
 ========================= */
 
@@ -444,6 +1020,23 @@ figcaption {
   .photo-gallery {
     margin-left: 0;
     margin-right: 0;
+  }
+
+  .main > .blog-article {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    margin: 16px 0 0;
+  }
+
+  .blog-resource-links {
+    gap: 8px;
+  }
+
+  .blog-article-content table,
+  .article-content table,
+  .collapsible-table table {
+    min-width: 38rem;
   }
 
   .photo-grid {

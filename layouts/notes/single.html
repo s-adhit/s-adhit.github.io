@@ -4,9 +4,13 @@
 
   <h1>{{ .Title }}</h1>
 
-  <div class="page-content">
+  <div class="page-content notes-article-content">
     {{ .Content }}
   </div>
+
+  {{- if or .Params.math .Site.Params.article.math -}}
+    {{- partialCached "article/components/math.html" . -}}
+  {{- end -}}
 
 </div>
 

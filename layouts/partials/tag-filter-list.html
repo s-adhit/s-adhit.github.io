@@ -1,31 +1,13 @@
-{{- $tagDefinitions := slice
-    (dict "label" "Machine Learning" "key" "machine learning")
-    (dict "label" "Deep Learning" "key" "deep learning")
-    (dict "label" "Transformers" "key" "transformers")
-    (dict "label" "Reinforcement Learning" "key" "reinforcement learning")
-    (dict "label" "Mathematics" "key" "mathematics")
-    (dict "label" "Linear Algebra" "key" "linear algebra")
-    (dict "label" "Probability" "key" "probability")
-    (dict "label" "Optimization" "key" "optimization")
-    (dict "label" "Generative Models" "key" "generative models")
-    (dict "label" "Diffusion" "key" "diffusion")
-    (dict "label" "VAEs" "key" "vaes")
-    (dict "label" "Reflections" "key" "reflections")
-    (dict "label" "Learning" "key" "learning")
-    (dict "label" "Research" "key" "research")
--}}
-{{- $approvedKeys := slice -}}
-{{- range $tagDefinitions -}}
-  {{- $approvedKeys = $approvedKeys | append .key -}}
-{{- end -}}
 {{- $pages := .RegularPages.ByDate.Reverse -}}
 {{- $usedKeys := slice -}}
+{{- $tagLabels := dict -}}
 {{- range $pages -}}
   {{- with .Params.tags -}}
     {{- range . -}}
       {{- $tagKey := lower . -}}
-      {{- if and (in $approvedKeys $tagKey) (not (in $usedKeys $tagKey)) -}}
+      {{- if not (in $usedKeys $tagKey) -}}
         {{- $usedKeys = $usedKeys | append $tagKey -}}
+        {{- $tagLabels = merge $tagLabels (dict $tagKey .) -}}
       {{- end -}}
     {{- end -}}
   {{- end -}}
@@ -36,49 +18,28 @@
   <div class="tag-filter" data-tag-filter>
     <div class="tag-filter-buttons" role="group" aria-label="{{ .Title }} tag filters">
       <button class="tag-filter-button" type="button" data-tag-filter-button data-tag="all" aria-pressed="true" aria-controls="{{ $listID }}">All</button>
-      {{- range $tagDefinitions -}}
-        {{- if in $usedKeys .key -}}
-          <button class="tag-filter-button" type="button" data-tag-filter-button data-tag="{{ .key }}" aria-pressed="false" aria-controls="{{ $listID }}">{{ .label }}</button>
-        {{- end -}}
+      {{- range (sort $usedKeys) -}}
+        <button class="tag-filter-button" type="button" data-tag-filter-button data-tag="{{ . }}" aria-pressed="false" aria-controls="{{ $listID }}">{{ index $tagLabels . }}</button>
       {{- end -}}
     </div>
     <p class="tag-filter-status" data-tag-filter-status aria-live="polite"></p>
   </div>
 {{- end -}}
 
-{{- if eq .Section "notes" -}}
-  <ul id="{{ $listID }}" class="notes-list" data-tag-filter-list>
-{{- else -}}
-  <div id="{{ $listID }}" class="blog-list" data-tag-filter-list>
-{{- end -}}
+<ul id="{{ $listID }}" class="notes-list index-entry-list" data-tag-filter-list>
   {{- range $pages -}}
     {{- $pageTags := slice -}}
     {{- with .Params.tags -}}
       {{- range . -}}
-        {{- $tagKey := lower . -}}
-        {{- if in $approvedKeys $tagKey -}}
-          {{- $pageTags = $pageTags | append $tagKey -}}
-        {{- end -}}
+        {{- $pageTags = $pageTags | append (lower .) -}}
       {{- end -}}
     {{- end -}}
-    {{- if eq $.Section "notes" -}}
-      <li data-tag-filter-item data-tags="{{ delimit $pageTags "|" }}">
-    {{- else -}}
-      <div data-tag-filter-item data-tags="{{ delimit $pageTags "|" }}">
-    {{- end -}}
+    <li data-tag-filter-item data-tags="{{ delimit $pageTags "|" }}">
       <a href="{{ .RelPermalink }}">{{ .Title }}</a>
       <span class="note-date">{{ .Date.Format "2006-01-02" }}</span>
-    {{- if eq $.Section "notes" -}}
-      </li>
-    {{- else -}}
-      </div>
-    {{- end -}}
+    </li>
   {{- end -}}
-{{- if eq .Section "notes" -}}
-  </ul>
-{{- else -}}
-  </div>
-{{- end -}}
+</ul>
 
 <style>
   .tag-filter { max-width: 700px; margin-top: 24px; }
@@ -88,8 +49,6 @@
   .tag-filter-button[aria-pressed="true"] { border-color: var(--accent); color: var(--accent-soft); }
   .tag-filter-button:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
   .tag-filter-status { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
-  .blog-list { margin-top: 16px; }
-  .blog-list > div { margin-bottom: 8px; }
   @media (max-width: 767.98px) { .home-content .tag-filter { margin-left: 0; } }
 </style>
 

@@ -1,0 +1,23 @@
+{{- $githubURL := printf "%v" (.Params.github_url | default "") -}}
+{{- $huggingFaceURL := printf "%v" (.Params.huggingface_url | default "") -}}
+{{- $httpsURLPattern := "^https://[^/?#[:space:]]+([/?#][^[:space:]]*)?$" -}}
+{{- $hasGitHub := gt (len (findRE $httpsURLPattern $githubURL)) 0 -}}
+{{- $hasHuggingFace := gt (len (findRE $httpsURLPattern $huggingFaceURL)) 0 -}}
+{{- $githubLogo := resources.Get "icons/GitHub.svg" | fingerprint -}}
+{{- $huggingFaceLogo := resources.Get "icons/hf-logo.svg" | fingerprint -}}
+{{- if or $hasGitHub $hasHuggingFace }}
+<nav class="blog-resource-links" aria-label="Project resources">
+  {{- if $hasGitHub }}
+  <a class="blog-resource-link" href="{{ $githubURL }}" target="_blank" rel="noopener noreferrer" aria-label="GitHub Code (opens in a new tab)">
+    <img class="blog-resource-logo" src="{{ $githubLogo.RelPermalink }}" alt="" aria-hidden="true">
+    <span>GitHub Code</span>
+  </a>
+  {{- end }}
+  {{- if $hasHuggingFace }}
+  <a class="blog-resource-link" href="{{ $huggingFaceURL }}" target="_blank" rel="noopener noreferrer" aria-label="Hugging Face Model (opens in a new tab)">
+    <img class="blog-resource-logo" src="{{ $huggingFaceLogo.RelPermalink }}" alt="" aria-hidden="true">
+    <span>Hugging Face Model</span>
+  </a>
+  {{- end }}
+</nav>
+{{- end }}

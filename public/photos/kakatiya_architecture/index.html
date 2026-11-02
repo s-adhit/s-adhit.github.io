@@ -8,33 +8,17 @@
 <link rel="canonical" href="http://localhost:1313/photos/kakatiya_architecture/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap">
 
 
-<link rel="stylesheet" href="/scss/style.min.8de28ddec304fae460aa9c97fe888d9a3dacbaca197095d7210328a9d88bd37b.css"><meta property='og:title' content="Kakatiya Architecture (Warangal)">
+<link rel="stylesheet" href="/scss/style.min.499942f699c939302bb11f2aaedb5f10119983f3a5e219ab20ce4e5f5bfefa07.css"><meta property='og:title' content="Kakatiya Architecture (Warangal)">
 <meta property='og:description' content="">
 <meta property='og:url' content='http://localhost:1313/photos/kakatiya_architecture/'>
 <meta property='og:site_name' content='Adhit'>
 <meta property='og:type' content='article'><meta property='article:section' content='Photos' /><meta property='article:published_time' content='2025-12-27T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2025-12-27T00:00:00&#43;00:00'/>
 <meta name="twitter:title" content="Kakatiya Architecture (Warangal)">
 <meta name="twitter:description" content="">
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-
-
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-
-<script>
-window.MathJax = {
-  tex: {
-    inlineMath: [['$', '$'], ['\\(', '\\)']]
-  }
-};
-</script>
-
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
     </head>
     <body class="
     article-page
@@ -238,25 +222,31 @@ window.MathJax = {
                 defer
                 >
             </script><script>
-    window.addEventListener("DOMContentLoaded", () => {
-        const elementsToRender = [".main-article", ".widget--toc"];
+    
+    
+    document.addEventListener("DOMContentLoaded", () => {
+        if (typeof window.renderMathInElement !== "function") return;
 
-        elementsToRender.forEach(selector => {
-            const element = document.querySelector(selector);
-            if (element) {
-                renderMathInElement(element, {
+        document.querySelectorAll(".main-article, .blog-article-content, .notes-article-content")
+            .forEach(element => {
+                if (element.dataset.mathRendered === "true") return;
+
+                window.renderMathInElement(element, {
                     delimiters: [
                         { left: "$$", right: "$$", display: true },
+                        { left: "\\[", right: "\\]", display: true },
                         { left: "$", right: "$", display: false },
-                        { left: "\\(", right: "\\)", display: false },
-                        { left: "\\[", right: "\\]", display: true }
+                        { left: "\\(", right: "\\)", display: false }
                     ],
-                    ignoredClasses: ["gist"]
+                    ignoredTags: ["script", "noscript", "style", "textarea", "pre", "code"],
+                    ignoredClasses: ["gist"],
+                    throwOnError: false
                 });
-            }
-        });
+                element.dataset.mathRendered = "true";
+            });
     });
 </script>
+
     
 </article>
 
@@ -339,7 +329,7 @@ window.MathJax = {
             </main>
         </div>
         
-<script type="text/javascript" src="/ts/main.b6e6f296f88b87a5b1ef3fb69d6e6193d5f097c5c874667ea5ec9447b5a04d86.js" defer></script><script type="text/javascript" src="/ts/custom.135eb289ec311525feffd1039d63e3dacd7182342cb19d2abb2d5198bf52d66a.js" defer></script>
+<script type="text/javascript" src="/ts/main.b6e6f296f88b87a5b1ef3fb69d6e6193d5f097c5c874667ea5ec9447b5a04d86.js" defer></script><script type="text/javascript" src="/ts/custom.05fcce7b0fec8cea073248644a75fe04c10e6c0954f1112808f34eb03ec59b6b.js" defer></script>
 
 
 <footer></footer>

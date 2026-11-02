@@ -1,0 +1,18 @@
+{{- $title := .Get "title" | default "Table" -}}
+{{- $description := .Get "description" -}}
+{{- $openValue := .Get "open" | default "false" -}}
+{{- $isOpen := eq (lower $openValue) "true" -}}
+{{- $content := .Page.RenderString (dict "display" "block") .Inner -}}
+
+<details class="collapsible-table"{{ if $isOpen }} open{{ end }}>
+  <summary>
+    <span class="collapsible-table__title">{{ $title }}</span>
+    <span class="collapsible-table__hint" aria-hidden="true"><span class="collapsible-table__expand-label">Expand</span><span class="collapsible-table__collapse-label">Collapse</span></span>
+  </summary>
+  {{- with $description }}
+  <p class="collapsible-table__description">{{ . }}</p>
+  {{- end }}
+  <div class="collapsible-table__content">
+    {{ $content }}
+  </div>
+</details>

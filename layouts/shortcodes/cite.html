@@ -1,0 +1,19 @@
+{{- $id := .Get "ref" | default (.Get 0) -}}
+{{- $references := .Page.Params.references | default slice -}}
+{{- $match := false -}}
+{{- $number := 0 -}}
+{{- range $index, $reference := $references -}}
+  {{- if eq $reference.id $id -}}
+    {{- $match = $reference -}}
+    {{- $number = add $index 1 -}}
+  {{- end -}}
+{{- end -}}
+{{- if not $match -}}
+  {{- errorf "cite shortcode: reference %q was not found in %s" $id .Page.File.Path -}}
+{{- end -}}
+{{- $text := $match.citation | default $match.text -}}
+{{- if not $text -}}
+  {{- errorf "cite shortcode: reference %q in %s needs a citation field" $id .Page.File.Path -}}
+{{- end -}}
+{{- $preview := .Page.RenderString (dict "display" "inline") $text | plainify -}}
+<sup class="citation"><a class="citation__link" href="#ref-{{ $id | anchorize }}" aria-label="Citation {{ $number }}: {{ $preview }}" data-citation-preview="{{ $preview }}">[{{ $number }}]</a></sup>

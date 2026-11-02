@@ -1,15 +1,16 @@
 {{ define "main" }}
 
-<div class="coming-soon">
+<div class="home-content">
 
+  <!-- Title -->
   <h1>{{ .Title }}</h1>
 
-  {{ if eq (len .RegularPages) 0 }}
-    <p class="coming-text">Coming Soon ✨</p>
-  {{ else }}
-    {{ partial "tag-filter-list.html" . }}
-  {{ end }}
+  <!-- Intro content from _index.md -->
+  <div class="page-content">
+    {{ .Content }}
+  </div>
 
+  {{ partial "tag-filter-list.html" . }}
 </div>
 
 {{ end }}

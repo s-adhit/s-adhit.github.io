@@ -1,13 +1,48 @@
 {{ define "main" }}
+{{- $readingMinutes := .ReadingTime -}}
+{{- if isset .Params "reading_minutes" -}}
+  {{- $readingMinutes = .Params.reading_minutes -}}
+{{- end -}}
+<article class="blog-article">
+  <header class="blog-article-header">
+    <h1>{{ .Title }}</h1>
+    <p class="blog-article-meta">
+      {{- if not .Date.IsZero -}}
+        <time datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">{{ .Date | time.Format "Jan 2, 2006" }}</time>
+        <span aria-hidden="true"> &middot; </span>
+      {{- end -}}
+      <span>{{ $readingMinutes }} min read</span>
+    </p>
+    {{ partial "blog/resource-links.html" . }}
+  </header>
 
-<div class="home-content">
+  {{ partial "blog/toc.html" . }}
 
-  <h1>{{ .Title }}</h1>
-
-  <div class="page-content">
-    {{ .Content }}
-  </div>
-
-</div>
-
+  <section class="blog-article-content">
+    {{- /*
+      Goldmark has already emitted semantic table markup at this point.  Wrap
+      only blog-post tables in a native disclosure; a preceding bold "Table …"
+      paragraph becomes the summary so it is not shown twice.  Add
+      <!-- table:open --> immediately before a Markdown table to opt out of
+      the default collapsed state for that one table.
+    */ -}}
+    {{- $content := .Content -}}
+    {{- $openCaptionPattern := `(?s)<p><strong>(Table[^<]*)</strong></p>\s*<!--\s*table:open\s*-->\s*(<table)(>.*?</table>)` -}}
+    {{- $captionPattern := `(?s)<p><strong>(Table[^<]*)</strong></p>\s*(<table)(>.*?</table>)` -}}
+    {{- $openTablePattern := `(?s)<!--\s*table:open\s*-->\s*(<table)(>.*?</table>)` -}}
+    {{- $tablePattern := `(?s)(<table>.*?</table>)` -}}
+    {{- $tableHint := `<span class="collapsible-table__hint" aria-hidden="true"><span class="collapsible-table__expand-label">Expand</span><span class="collapsible-table__collapse-label">Collapse</span></span>` -}}
+    {{- $openCaptionTable := printf `<details class="collapsible-table blog-table" open><summary><span class="collapsible-table__title">${1}</span>%s</summary><div class="collapsible-table__content">${2} class="blog-table__table"${3}</div></details>` $tableHint -}}
+    {{- $captionTable := printf `<details class="collapsible-table blog-table"><summary><span class="collapsible-table__title">${1}</span>%s</summary><div class="collapsible-table__content">${2} class="blog-table__table"${3}</div></details>` $tableHint -}}
+    {{- $openTable := printf `<details class="collapsible-table blog-table" open><summary><span class="collapsible-table__title">View table</span>%s</summary><div class="collapsible-table__content">${1} class="blog-table__table"${2}</div></details>` $tableHint -}}
+    {{- $table := printf `<details class="collapsible-table blog-table"><summary><span class="collapsible-table__title">View table</span>%s</summary><div class="collapsible-table__content">${1}</div></details>` $tableHint -}}
+    {{- $content = $content | replaceRE $openCaptionPattern $openCaptionTable -}}
+    {{- $content = $content | replaceRE $captionPattern $captionTable -}}
+    {{- $content = $content | replaceRE $openTablePattern $openTable -}}
+    {{- $content | replaceRE $tablePattern $table | safeHTML -}}
+  </section>
+  {{- if or .Params.math .Site.Params.article.math -}}
+    {{- partialCached "article/components/math.html" . -}}
+  {{- end -}}
+</article>
 {{ end }}
