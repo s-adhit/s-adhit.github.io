@@ -7,13 +7,10 @@ tags: ["Machine Learning", "Math"]
 ---
 
 ## Source
-
-What I learned or read today:
-
 - [Cornell CS4780 — Lecture 08](https://www.cs.cornell.edu/courses/cs4780/2024sp/lectures/lecturenote08.html)
 - [What Could Go Wrong? Linear Regression](https://vkhangpham.medium.com/what-could-go-wrong-linear-regression-517f9823241f)
 
-## My one sentence
+## One sentence intro
 
 Linear regression is a basic machine learning model that learns to fit a line to data points which are scattered across the coordinate plane.
 
