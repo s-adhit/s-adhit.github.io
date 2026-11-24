@@ -3,7 +3,7 @@ title: "Linear Regression"
 date: 2026-11-24
 draft: false
 math: true
-tags: ["Machine Learning", "Linear Regression"]
+tags: ["Machine Learning", "Math"]
 ---
 
 ## Source
@@ -39,7 +39,7 @@ Similarly, estimating with MAP adds a regularizing term $\lambda \lVert w\rVert_
 
 A few common pitfalls for Linear regression are:
 
-- **Non-Linearity:** The data sampled does not contain any linear relationship between features ($x$) and labels ($y$), for example: say the rate of coffee cooling is noted every minute from when it’s made, initially it steeply cools down but, as time passes cooling slows down.
+- **Non-Linearity:** The data sampled does not contain any linear relationship between features ($x$) and labels ($y$), for example: say the temperature of coffee cooling is noted every minute from when it’s made, initially it steeply cools down but, as time passes cooling slows down.
 - **Multicollinearity:** The features observed are highly correlated with each other, example: for a house price predictor model, the number of rooms and the square footage might give similar information which might steer the model away from generalizability.
 - **Autocorrelation:** The data points sampled are not independent from one another. The core assumption of Linear regression is that the errors are I.I.D. example: Daily weather and stock market data are common examples of auto correlation.
 - **Omitted-Variable Bias:** While omitting one variable such as square footage from the house price predictor solve Multicollinearity, this approach can introduce bias.
