@@ -3,7 +3,7 @@ title: 'Vector Field'
 date: '2026-03-27T15:29:40+05:30'
 draft: false
 tags:
-  - Mathematics
+ ["Math","Physcis"]
 ---
 
 <figure style="text-align: center;">
